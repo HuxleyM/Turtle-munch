@@ -1,0 +1,66 @@
+
+<!doctype html>
+<html>
+<head>
+
+<title>Garp garp</title>
+<script src="garpgarp.js"></script>
+<script src="menu.js"></script>
+<style>
+canvas{
+	display: block;
+	margin: 10px auto;
+	background: lightblue;
+}
+
+</style>
+</head>
+<body>
+<body>
+
+	<canvas id="myCanvas" width="600" height="600">
+
+</body>
+<script>
+    var currentState = undefined;
+   document.addEventListener( 'DOMContentLoaded', controlState('start'));
+
+	function controlState(gameState){
+		switch (gameState){
+			case 'start':
+				Menu.start();
+				break;
+			case 'play':
+				Game.start();
+				break;
+			default:
+				console.log('state not recognised');
+		}
+
+	}
+
+
+    //------------------------------------------------------------------------------------------------sorting out global key presses why do i even do this?
+
+	var keyPress = [];
+    document.addEventListener('keydown', function(e){
+		var lastKey = keyPress.length - 1;
+		if(keyPress[lastKey]!=e.keyCode){
+			keyPress.push(e.keyCode);
+		}
+	}, true);
+	// this does not remove all the keys... just a few..
+	document.addEventListener('keyup', function(e){
+		for(var i = 0; i < keyPress.length; i++){
+			if(keyPress[i] == e.keyCode){
+				keyPress.splice(i, 1);
+			}
+		}
+	}, true);
+
+	// swithc statement to control the state of the application 
+
+
+    
+</script>
+</html>
