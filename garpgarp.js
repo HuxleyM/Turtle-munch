@@ -10,39 +10,137 @@ function Sprite(spriteW, spriteH, cycle, frames, xPos, yPos) {
 	this.yPos = yPos;
 }
 
-var Garp =  new Sprite(98,83,0,4,200,100);
+//------ initializing  sprites to play with
+var availableCharacters = [];
+var charactersInPlay=[];
+var charactersOutOfPlay = [];
+var Garp1 =  new Sprite(98,83,0,4,200,100);
+var Garp2 = new Sprite(98,83,0,4,350,200);
+var Garp3 = new Sprite(98,83,0,4,400,500);
+var Garp4 = new Sprite(98,83,0,4,400,100);
+var Player = new Sprite(98,83,0,1,400,100)
+availableCharacters.push(Garp1,Garp2,Garp3,Garp4);
+charactersInPlay.push(Garp1,Garp2,Garp3);
 
-console.log(typeof Garp);
+
+var Background ={
+backgroundImage : undefined,
+backgroundImageWidth: undefined,
+backgroundImageHeight : undefined,
+}
+
+
 var Game = {
 	canvas : undefined,
     canvasContext : undefined, 
+    x: 0,
+    y: 0,
+    maximumHeight: undefined,
+    maximumWidth: undefined,
+    delta_y: undefined,
+    delta_x: undefined,
+    randomizeYPos: function(){
+        return Math.floor((Math.random() * Game.canvas.height) + 1);
+    },
     start : function () 
     {     
         currentState = 'game';
         Game.canvas = document.getElementById('myCanvas');
         Game.canvasContext = Game.canvas.getContext('2d');
-        Garp.img = new Image();
-        Garp.img.src = "garpOne.png";
+        Background.backgroundImage = new Image();
+        Background.backgroundImage.src='background.jpg';
+            // we need to make x and y varibales for b and g or else everything is pusshe dof
+        Background.x = Game.x;
+        Background.y = Game.y;
+        //the global varibales will automatically append as they are not in any object.
+        Background.maximumWidth = Game.canvas.width;
+        Background.maximumHeight = Game.canvas.height;
+        Background.delta_x= - 5; ///--------------------------- changed this for object
+        Background.delta_y= - 0.5;
+        // sprite source matching
+        Garp1.img = new Image();
+        Garp1.img.src = "garpOne.png";
+        Garp2.img = new Image();
+        Garp2.img.src = "garpOne.png";
+        Garp3.img = new Image();
+        Garp3.img.src = "garpOne.png";
+        Garp4.img = new Image();
+        Garp4.img.src = "garpOne.png";
+        // player
+        Player.img = new Image();
+        Player.img.src = "garpOne.png";
         Game.mainLoop();
+    },
+
+    drawBackground : function(){
+        // width thats been defined i the background object is now being changed to the actual width of the image.
+        Background.backgroundImageWidth = Background.backgroundImage.width;
+        Background.backgroundImageHeight = Background.backgroundImage.height;
+        //ading the background
+        Game.canvasContext.drawImage(Background.backgroundImage,Background.x, Background.y, Background.backgroundImageWidth, Background.backgroundImageHeight);
+        //-------------------------------------- drawing score
+        Game.canvasContext.fillStyle = '#fff';
+        Game.canvasContext.font = '20px sans-serif';
+        Game.canvasContext.textBaseline = 'top'; 
+        Game.canvasContext.fillText("score ",200,0);
     },
     clearCanvas : function () {
         Game.canvasContext.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
     },
     update : function () 
 {   
-	// ades says ' that remeber
-	// game.cycle adding plus one everytime updatetakes places, then modulus - remainder divide by 'computer' number of frames
-    Garp.cycle = (Garp.cycle + 1) % Garp.frames;
+
+        
+        Player.yPos++;
+      
+        //Player.yPos++;
+        Background.x += Background.delta_x;
+        // if background distancex is greater then backgrounds maximum width then start again!
+        if(Background.x <= - Background.maximumWidth){
+            Background.x = Game.x;
+        }
+        // ades says ' that remeber
+        // game.cycle adding plus one everytime updatetakes places, then modulus - remainder divide by 'computer' number of frames
+        for(var i = 0; i< charactersInPlay.length; i++){
+            charactersInPlay[i].cycle = (charactersInPlay[i].cycle + 1) % charactersInPlay[i].frames;
+            //-- trying to make move from out of play
+            charactersInPlay[i].xPos += Background.delta_x;
+            // trying to add collision function 
+            if( charactersInPlay[i].xPos > Player.xPos && 
+                charactersInPlay[i].xPos < Player.xPos + Player.spriteW && 
+                charactersInPlay[i].yPos > Player.yPos && 
+                charactersInPlay[i].yPos < Player.yPos + Player.spriteH) {
+                console.log('collision');
+            }
+        }
+        //------ adding a new charcater if aout of play 
+    
+        while(charactersInPlay.length<=3){
+            var choiceOfChar = Math.floor(Math.random()*availableCharacters.length);
+            availableCharacters[choiceOfChar].xPos = Game.canvas.width;
+            availableCharacters[choiceOfChar].yPos = Game.randomizeYPos();
+            //availableCharacters[choiceOfChar].yPos -= availableCharacters[choiceOfChar].spriteH;
+            charactersInPlay.push(availableCharacters[choiceOfChar]);
+    }
     
 },
     draw : function () 
 { 
-			Game.canvasContext.drawImage(Garp.img,
-            // source rectangle
-            Garp.cycle * Garp.spriteW, 0, Garp.spriteW, 
-            Garp.spriteH,
-            // destination rectangle
-            Garp.xPos, Garp.yPos, Garp.spriteW, Garp.spriteH);
+            // when drawing thing about it like back to front
+            Game.drawBackground();
+            Game.canvasContext.drawImage(Player.img,100,Player.yPos,Player.spriteW, Player.spriteH);
+            for(var i =0 ; i< charactersInPlay.length; i++){
+                Game.canvasContext.drawImage(charactersInPlay[i].img,
+                    // source rectangle
+                    charactersInPlay[i].cycle * charactersInPlay[i].spriteW, 0, charactersInPlay[i].spriteW, 
+                    charactersInPlay[i].spriteH,
+                    // destination rectangle
+                    charactersInPlay[i].xPos, charactersInPlay[i].yPos, charactersInPlay[i].spriteW, charactersInPlay[i].spriteH);
+                    if(charactersInPlay[i].xPos < 0){
+                        charactersInPlay.splice(i,1);
+                        console.log(charactersInPlay.length);
+                    }
+            }    
 },
     mainLoop :  function() {
         console.log('game');
@@ -57,8 +155,3 @@ var Game = {
         }
     }
 }
-
-
-
-
-

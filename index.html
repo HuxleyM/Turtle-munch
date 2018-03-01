@@ -16,14 +16,35 @@ canvas{
 </style>
 </head>
 <body>
-<body>
+<!--onload ="recursive(1)"-->
 
 	<canvas id="myCanvas" width="600" height="600">
 
 </body>
 <script>
-    var currentState = undefined;
+   var currentState = undefined;
    document.addEventListener( 'DOMContentLoaded', controlState('start'));
+
+    //------------------------------------------------------------------------------------------------sorting out global key presses why do i even do this?
+
+	var keyPress = [];
+	
+    document.addEventListener('keydown', function(e){
+		var lastKey = keyPress.length - 1;
+		if(keyPress[lastKey]!=e.keyCode){
+			keyPress.push(e.keyCode);
+			console.log(keyPress);
+		}
+	}, true);
+	// this does not remove all the keys... just a few..
+	document.addEventListener('keyup', function(e){
+		for(var i = 0; i < keyPress.length; i++){
+			if(keyPress[i] == e.keyCode){
+				keyPress.splice(i, 1);
+				console.log(keyPress);
+			}
+		}
+	}, true);
 
 	function controlState(gameState){
 		switch (gameState){
@@ -40,27 +61,8 @@ canvas{
 	}
 
 
-    //------------------------------------------------------------------------------------------------sorting out global key presses why do i even do this?
+   
 
-	var keyPress = [];
-    document.addEventListener('keydown', function(e){
-		var lastKey = keyPress.length - 1;
-		if(keyPress[lastKey]!=e.keyCode){
-			keyPress.push(e.keyCode);
-		}
-	}, true);
-	// this does not remove all the keys... just a few..
-	document.addEventListener('keyup', function(e){
-		for(var i = 0; i < keyPress.length; i++){
-			if(keyPress[i] == e.keyCode){
-				keyPress.splice(i, 1);
-			}
-		}
-	}, true);
-
-	// swithc statement to control the state of the application 
-
-
-    
+	// swithc statement to control the state of the application */
 </script>
 </html>

@@ -24,7 +24,7 @@ var Menu = {
 {   
 	// ades says ' that remeber
     // Menu.cycle adding plus one everytime updatetakes places, then modulus - remainder divide by 'computer' number of frames
-    Ship.y--;
+    Ship.y-= 10;
     if (Ship.y + Ship.height < 0){
         Game.start();
         currentState = 'game';
