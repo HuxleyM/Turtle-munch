@@ -15,12 +15,11 @@ var availableCharacters = [];
 var charactersInPlay=[];
 var charactersOutOfPlay = [];
 var Garp1 =  new Sprite(98,83,0,4,200,100);
-var Garp2 = new Sprite(98,83,0,4,350,200);
-var Garp3 = new Sprite(98,83,0,4,400,500);
-var Garp4 = new Sprite(98,83,0,4,400,100);
+var Garp2 = new Sprite(40,83,0,4,350,200);
+var Garp3 = new Sprite(98,40,0,4,400,500);
+var Garp4 = new Sprite(50,50,0,4,400,100);
 var Player = new Sprite(98,83,0,1,400,100)
 availableCharacters.push(Garp1,Garp2,Garp3,Garp4);
-charactersInPlay.push(Garp1,Garp2,Garp3);
 
 
 var Background ={
@@ -69,15 +68,16 @@ var Game = {
         // player
         Player.img = new Image();
         Player.img.src = "garpOne.png";
+        // characters in play
+        charactersInPlay = availableCharacters.splice(1,3);
         Game.mainLoop();
     },
 
     drawBackground : function(){
         // width thats been defined i the background object is now being changed to the actual width of the image.
-        Background.backgroundImageWidth = Background.backgroundImage.width;
-        Background.backgroundImageHeight = Background.backgroundImage.height;
+  
         //ading the background
-        Game.canvasContext.drawImage(Background.backgroundImage,Background.x, Background.y, Background.backgroundImageWidth, Background.backgroundImageHeight);
+        Game.canvasContext.drawImage(Background.backgroundImage,Background.x, Background.y, Background.backgroundImage.width,  Background.backgroundImage.height);
         //-------------------------------------- drawing score
         Game.canvasContext.fillStyle = '#fff';
         Game.canvasContext.font = '20px sans-serif';
@@ -90,10 +90,17 @@ var Game = {
     update : function () 
 {   
 
-        
-        Player.yPos++;
-      
-        //Player.yPos++;
+   if(charactersInPlay.length < 3){
+        //var choiceOfChar = Math.floor(Math.random()* availableCharacters.length);// this is always returning 0
+        console.log('length'+availableCharacters.length);
+        availableCharacters[0].xPos = 600;
+        availableCharacters[0].yPos = Game.randomizeYPos();
+        //availableCharacters[choiceOfChar].yPos -= availableCharacters[choiceOfChar].spriteH;
+        // this is the problems here 
+        charactersInPlay.splice(2,0,availableCharacters[0]);
+        //availableCharacters.splice(0,1);
+}
+
         Background.x += Background.delta_x;
         // if background distancex is greater then backgrounds maximum width then start again!
         if(Background.x <= - Background.maximumWidth){
@@ -102,26 +109,25 @@ var Game = {
         // ades says ' that remeber
         // game.cycle adding plus one everytime updatetakes places, then modulus - remainder divide by 'computer' number of frames
         for(var i = 0; i< charactersInPlay.length; i++){
+            charactersInPlay[i].xPos -= 5;
             charactersInPlay[i].cycle = (charactersInPlay[i].cycle + 1) % charactersInPlay[i].frames;
             //-- trying to make move from out of play
-            charactersInPlay[i].xPos += Background.delta_x;
+                      //- removing if smaller then canvas width
+           if(charactersInPlay[i].xPos < 0){
+                charactersInPlay.splice(i,1);
+            }
             // trying to add collision function 
-            if( charactersInPlay[i].xPos > Player.xPos && 
+           /* if( charactersInPlay[i].xPos > Player.xPos && 
                 charactersInPlay[i].xPos < Player.xPos + Player.spriteW && 
                 charactersInPlay[i].yPos > Player.yPos && 
                 charactersInPlay[i].yPos < Player.yPos + Player.spriteH) {
                 console.log('collision');
-            }
-        }
+            }*/
+            
         //------ adding a new charcater if aout of play 
     
-        while(charactersInPlay.length<=3){
-            var choiceOfChar = Math.floor(Math.random()*availableCharacters.length);
-            availableCharacters[choiceOfChar].xPos = Game.canvas.width;
-            availableCharacters[choiceOfChar].yPos = Game.randomizeYPos();
-            //availableCharacters[choiceOfChar].yPos -= availableCharacters[choiceOfChar].spriteH;
-            charactersInPlay.push(availableCharacters[choiceOfChar]);
-    }
+      
+        }
     
 },
     draw : function () 
@@ -136,14 +142,10 @@ var Game = {
                     charactersInPlay[i].spriteH,
                     // destination rectangle
                     charactersInPlay[i].xPos, charactersInPlay[i].yPos, charactersInPlay[i].spriteW, charactersInPlay[i].spriteH);
-                    if(charactersInPlay[i].xPos < 0){
-                        charactersInPlay.splice(i,1);
-                        console.log(charactersInPlay.length);
-                    }
+                    
             }    
 },
     mainLoop :  function() {
-        console.log('game');
         Game.clearCanvas();
         Game.update();
         Game.draw();
@@ -151,7 +153,7 @@ var Game = {
         // maths 
         //console.log('game Js');
         if(currentState == 'game'){
-            window.setTimeout(Game.mainLoop, 1500 / 10);
+            window.setTimeout(Game.mainLoop, 800 / 10);
         }
     }
 }
