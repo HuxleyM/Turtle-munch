@@ -1,32 +1,26 @@
 "use strict";
 
 
-function Sprite(spriteW, spriteH, cycle, frames, xPos, yPos) {
-    this.spriteW = spriteW;
-    this.spriteH = spriteH;
-	this.cycle = cycle;
-	this.frames = frames;
-	this.xPos = xPos;
-	this.yPos = yPos;
-}
-
-//------ initializing  sprites to play with
-var availableCharacters = [];
-var charactersInPlay=[];
-var charactersOutOfPlay = [];
-var Garp1 =  new Sprite(98,83,0,4,200,100);
-var Garp2 = new Sprite(40,83,0,4,350,200);
-var Garp3 = new Sprite(98,40,0,4,400,500);
-var Garp4 = new Sprite(50,50,0,4,400,100);
-var Player = new Sprite(98,83,0,1,400,100)
-availableCharacters.push(Garp1,Garp2,Garp3,Garp4);
 
 
-var Background ={
-backgroundImage : undefined,
-backgroundImageWidth: undefined,
-backgroundImageHeight : undefined,
-}
+//  key controls
+  //---- key controls here for now but will be moved... these controls need to be matched to states.. 
+  // or else his is all just  a bit messy
+  window.addEventListener('keydown', function(event){
+    if(event.keyCode == Game.keys.SP || event.keyCode == Game.keys.UA){
+        if(Player.yPos > 0){
+            Player.yPos-=5;
+        }
+    }
+  },true);
+
+  window.addEventListener('keyup', function(event){
+    if(event.keyCode == Game.keys.SP || event.keyCode == Game.keys.UA){
+        Player.yPos = Player.yPos;
+    }
+  },true);
+  
+
 
 
 var Game = {
@@ -38,8 +32,38 @@ var Game = {
     maximumWidth: undefined,
     delta_y: undefined,
     delta_x: undefined,
+    keys: {
+        UA:38,  SB:40, //SB = space bar
+    },
+    score: 0,
+  
     randomizeYPos: function(){
         return Math.floor((Math.random() * Game.canvas.height) + 1);
+    },
+    checkCollision: function(){
+        if((Player.yPos + Player.spriteH) > Game.canvas.height){
+            controlState('over');
+        }
+        /*for(var a = 0; a< charactersInPlay.length; a++){
+            /*if (charactersInPlay[a].xPos < Player.xPos + Player.spriteW &&
+                charactersInPlay[a].xPos + charactersInPlay[a].spriteW  > Player.xPos &&
+                charactersInPlay[a].yPos < Player.yPos + Player.spriteH &&
+                charactersInPlay[a].spriteH + charactersInPlay[a].yPos >  Player.yPos )
+                 {
+                 // collision detected!
+                 
+             }*/
+            /* 
+           if (Player.xPos < charactersInPlay[a].xPos + charactersInPlay[a].spriteW &&
+                Player.xPos +  Player.spriteW > charactersInPlay[a].xPos &&
+                Player.yPos < charactersInPlay[a].yPos + charactersInPlay[a].spriteH &&
+                Player.spriteH + Player.yPos >  charactersInPlay[a].yPos) {
+                // collision detected!
+                console.log('collided');
+                }
+        }*/
+         
+        
     },
     start : function () 
     {     
@@ -69,9 +93,25 @@ var Game = {
         Player.img = new Image();
         Player.img.src = "garpOne.png";
         // characters in play
-        charactersInPlay = availableCharacters.splice(1,3);
+        // so availbale characters still has 4 characters in play has 3
+        availableCharacters[0].xPos= 350;
+        availableCharacters[1].xPos = 450;
+        availableCharacters[2].xPos = 600;
+        Player.xPos = 200;
+        Player.yPos = 300;
+        charactersInPlay = [availableCharacters[0],availableCharacters[1],availableCharacters[2]];
+        console.log('available'+availableCharacters.length);
+        console.log('inplay'+charactersInPlay.length);
         Game.mainLoop();
     },
+    generateNew : function(){
+        var rand = Math.floor(Math.random() * availableCharacters.length);
+        var toMove = availableCharacters[rand];
+        toMove.xPos = 600;
+        charactersInPlay.push(toMove);
+    },
+
+    
 
     drawBackground : function(){
         // width thats been defined i the background object is now being changed to the actual width of the image.
@@ -82,52 +122,47 @@ var Game = {
         Game.canvasContext.fillStyle = '#fff';
         Game.canvasContext.font = '20px sans-serif';
         Game.canvasContext.textBaseline = 'top'; 
-        Game.canvasContext.fillText("score ",200,0);
+        Game.canvasContext.fillText("score " +Game.score,200,0);
     },
     clearCanvas : function () {
         Game.canvasContext.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
     },
     update : function () 
-{   
-
-   if(charactersInPlay.length < 3){
-        //var choiceOfChar = Math.floor(Math.random()* availableCharacters.length);// this is always returning 0
-        console.log('length'+availableCharacters.length);
-        availableCharacters[0].xPos = 600;
-        availableCharacters[0].yPos = Game.randomizeYPos();
-        //availableCharacters[choiceOfChar].yPos -= availableCharacters[choiceOfChar].spriteH;
-        // this is the problems here 
-        charactersInPlay.splice(2,0,availableCharacters[0]);
-        //availableCharacters.splice(0,1);
-}
-
+{       Game.score++;
+        if(Game.score > (200 * level)){
+            level++;
+            controlState('next');
+        }
+        Game.checkCollision();
+        Player.yPos+=2;
         Background.x += Background.delta_x;
         // if background distancex is greater then backgrounds maximum width then start again!
         if(Background.x <= - Background.maximumWidth){
             Background.x = Game.x;
-        }
-        // ades says ' that remeber
-        // game.cycle adding plus one everytime updatetakes places, then modulus - remainder divide by 'computer' number of frames
+        }   
+
         for(var i = 0; i< charactersInPlay.length; i++){
             charactersInPlay[i].xPos -= 5;
-            charactersInPlay[i].cycle = (charactersInPlay[i].cycle + 1) % charactersInPlay[i].frames;
-            //-- trying to make move from out of play
-                      //- removing if smaller then canvas width
-           if(charactersInPlay[i].xPos < 0){
-                charactersInPlay.splice(i,1);
+            if(charactersInPlay[i].xPos < 0){
+                charactersInPlay.splice(i, 1);
+            }    
+            if (Player.xPos < charactersInPlay[i].xPos + charactersInPlay[i].spriteW &&
+                Player.xPos + Player.spriteW  > charactersInPlay[i].xPos &&
+                Player.yPos < charactersInPlay[i].yPos + charactersInPlay[i].spriteH &&
+                Player.spriteH + Player.yPos >  charactersInPlay[i].yPos )
+                 {
+                 // collision detected!
+                 console.log('collided');
+                 
+                 }
             }
-            // trying to add collision function 
-           /* if( charactersInPlay[i].xPos > Player.xPos && 
-                charactersInPlay[i].xPos < Player.xPos + Player.spriteW && 
-                charactersInPlay[i].yPos > Player.yPos && 
-                charactersInPlay[i].yPos < Player.yPos + Player.spriteH) {
-                console.log('collision');
-            }*/
-            
-        //------ adding a new charcater if aout of play 
-    
-      
+
+       if(charactersInPlay.length < 3){
+            Game.generateNew();
         }
+        
+        
+        
     
 },
     draw : function () 
@@ -135,14 +170,13 @@ var Game = {
             // when drawing thing about it like back to front
             Game.drawBackground();
             Game.canvasContext.drawImage(Player.img,100,Player.yPos,Player.spriteW, Player.spriteH);
-            for(var i =0 ; i< charactersInPlay.length; i++){
-                Game.canvasContext.drawImage(charactersInPlay[i].img,
+            for(var a =0 ; a < charactersInPlay.length; a++){
+                Game.canvasContext.drawImage(charactersInPlay[a].img,
                     // source rectangle
-                    charactersInPlay[i].cycle * charactersInPlay[i].spriteW, 0, charactersInPlay[i].spriteW, 
-                    charactersInPlay[i].spriteH,
+                    charactersInPlay[a].cycle * charactersInPlay[a].spriteW, 0, charactersInPlay[a].spriteW, 
+                    charactersInPlay[a].spriteH,
                     // destination rectangle
-                    charactersInPlay[i].xPos, charactersInPlay[i].yPos, charactersInPlay[i].spriteW, charactersInPlay[i].spriteH);
-                    
+                    charactersInPlay[a].xPos, charactersInPlay[a].yPos, charactersInPlay[a].spriteW, charactersInPlay[a].spriteH);   
             }    
 },
     mainLoop :  function() {

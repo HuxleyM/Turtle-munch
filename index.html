@@ -4,8 +4,11 @@
 <head>
 
 <title>Garp garp</title>
+<script src="listObjects.js"></script>
 <script src="garpgarp.js"></script>
 <script src="menu.js"></script>
+<script src="next.js"></script>
+<script src="over.js"></script>
 <style>
 canvas{
 	display: block;
@@ -24,35 +27,29 @@ canvas{
 <script>
    var currentState = undefined;
    document.addEventListener( 'DOMContentLoaded', controlState('start'));
+	// adding level to control
+   var level = 1;
 
     //------------------------------------------------------------------------------------------------sorting out global key presses why do i even do this?
-
-	var keyPress = [];
-	
-    document.addEventListener('keydown', function(e){
-		var lastKey = keyPress.length - 1;
-		if(keyPress[lastKey]!=e.keyCode){
-			keyPress.push(e.keyCode);
-			console.log(keyPress);
-		}
-	}, true);
-	// this does not remove all the keys... just a few..
-	document.addEventListener('keyup', function(e){
-		for(var i = 0; i < keyPress.length; i++){
-			if(keyPress[i] == e.keyCode){
-				keyPress.splice(i, 1);
-				console.log(keyPress);
-			}
-		}
-	}, true);
 
 	function controlState(gameState){
 		switch (gameState){
 			case 'start':
+				currentState = 'menu';
 				Menu.start();
 				break;
 			case 'play':
+				currentState ='game';
 				Game.start();
+				break;
+			case 'next':
+				tempTimer = 0;
+				currentState ='next';
+				Next.start();
+				break;
+			case 'over':
+				currentState ='over';
+				Over.start();
 				break;
 			default:
 				console.log('state not recognised');
