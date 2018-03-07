@@ -18,7 +18,7 @@ var Garp2 = new Sprite(40,83,0,4,undefined,undefined);
 var Garp3 = new Sprite(98,40,0,4,undefined,undefined);
 var Garp4 = new Sprite(50,50,0,4,undefined,undefined);
 var Player = new Sprite(98,83,0,1,undefined,undefined)
-availableCharacters.push(Garp1,Garp2,Garp3,Garp4);
+
 
 
 

@@ -26,6 +26,10 @@
 var Game = {
 	canvas : undefined,
     canvasContext : undefined, 
+    // -- trying to map the charcaters
+    gameChars : [],
+    inPlay : [],
+    player : Player,
     x: 0,
     y: 0,
     maximumHeight: undefined,
@@ -44,26 +48,6 @@ var Game = {
         if((Player.yPos + Player.spriteH) > Game.canvas.height){
             controlState('over');
         }
-        /*for(var a = 0; a< charactersInPlay.length; a++){
-            /*if (charactersInPlay[a].xPos < Player.xPos + Player.spriteW &&
-                charactersInPlay[a].xPos + charactersInPlay[a].spriteW  > Player.xPos &&
-                charactersInPlay[a].yPos < Player.yPos + Player.spriteH &&
-                charactersInPlay[a].spriteH + charactersInPlay[a].yPos >  Player.yPos )
-                 {
-                 // collision detected!
-                 
-             }*/
-            /* 
-           if (Player.xPos < charactersInPlay[a].xPos + charactersInPlay[a].spriteW &&
-                Player.xPos +  Player.spriteW > charactersInPlay[a].xPos &&
-                Player.yPos < charactersInPlay[a].yPos + charactersInPlay[a].spriteH &&
-                Player.spriteH + Player.yPos >  charactersInPlay[a].yPos) {
-                // collision detected!
-                console.log('collided');
-                }
-        }*/
-         
-        
     },
     start : function () 
     {     
@@ -81,35 +65,29 @@ var Game = {
         Background.delta_x= - 5; ///--------------------------- changed this for object
         Background.delta_y= - 0.5;
         // sprite source matching
-        Garp1.img = new Image();
-        Garp1.img.src = "garpOne.png";
-        Garp2.img = new Image();
-        Garp2.img.src = "garpOne.png";
-        Garp3.img = new Image();
-        Garp3.img.src = "garpOne.png";
-        Garp4.img = new Image();
-        Garp4.img.src = "garpOne.png";
+        Game.gameChars.push(Garp1,Garp2,Garp3,Garp4),
+        Game.gameChars.Garp1.img = new Image();
+        Game.gameChars.Garp1.img.src = "garpOne.png";
+        Game.gameChars.Garp2.img = new Image();
+        Game.gameChars.Garp2.img.src = "garpOne.png";
+        Game.gameChars.Garp3.img = new Image();
+        Game.gameChars.Garp3.img.src = "garpOne.png";
+        Game.gameChars.Garp4.img = new Image();
+        Game.gameChars.Garp4.img.src = "garpOne.png";
         // player
-        Player.img = new Image();
-        Player.img.src = "garpOne.png";
+        Game.player.Player.img = new Image();
+        Game.player.Player.img.src = "garpOne.png";
         // characters in play
-        // so availbale characters still has 4 characters in play has 3
-        availableCharacters[0].xPos= 350;
-        availableCharacters[1].xPos = 450;
-        availableCharacters[2].xPos = 600;
-        Player.xPos = 200;
-        Player.yPos = 300;
-        charactersInPlay = [availableCharacters[0],availableCharacters[1],availableCharacters[2]];
-        console.log('available'+availableCharacters.length);
-        console.log('inplay'+charactersInPlay.length);
+        Game.inPlay.push(Game.gameChars.Garp1,Game.gameChars.Garp2,Game.gameChars.Garp3),
+       
         Game.mainLoop();
     },
-    generateNew : function(){
+    /*generateNew : function(){
         var rand = Math.floor(Math.random() * availableCharacters.length);
         var toMove = availableCharacters[rand];
         toMove.xPos = 600;
         charactersInPlay.push(toMove);
-    },
+    },*/
 
     
 
@@ -146,7 +124,7 @@ var Game = {
             if(charactersInPlay[i].xPos < 0){
                 charactersInPlay.splice(i, 1);
             }    
-            if (Player.xPos < charactersInPlay[i].xPos + charactersInPlay[i].spriteW &&
+            if (player.Player.xPos < charactersInPlay[i].xPos + charactersInPlay[i].spriteW &&
                 Player.xPos + Player.spriteW  > charactersInPlay[i].xPos &&
                 Player.yPos < charactersInPlay[i].yPos + charactersInPlay[i].spriteH &&
                 Player.spriteH + Player.yPos >  charactersInPlay[i].yPos )
