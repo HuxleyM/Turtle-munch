@@ -44,24 +44,6 @@ var Game = {
         if((Player.yPos + Player.spriteH) > Game.canvas.height){
             controlState('over');
         }
-        /*for(var a = 0; a< charactersInPlay.length; a++){
-            /*if (charactersInPlay[a].xPos < Player.xPos + Player.spriteW &&
-                charactersInPlay[a].xPos + charactersInPlay[a].spriteW  > Player.xPos &&
-                charactersInPlay[a].yPos < Player.yPos + Player.spriteH &&
-                charactersInPlay[a].spriteH + charactersInPlay[a].yPos >  Player.yPos )
-                 {
-                 // collision detected!
-                 
-             }*/
-            /* 
-           if (Player.xPos < charactersInPlay[a].xPos + charactersInPlay[a].spriteW &&
-                Player.xPos +  Player.spriteW > charactersInPlay[a].xPos &&
-                Player.yPos < charactersInPlay[a].yPos + charactersInPlay[a].spriteH &&
-                Player.spriteH + Player.yPos >  charactersInPlay[a].yPos) {
-                // collision detected!
-                console.log('collided');
-                }
-        }*/
          
         
     },
@@ -71,7 +53,7 @@ var Game = {
         Game.canvas = document.getElementById('myCanvas');
         Game.canvasContext = Game.canvas.getContext('2d');
         Background.backgroundImage = new Image();
-        Background.backgroundImage.src='background.jpg';
+        Background.backgroundImage.src='sprites/background.jpg';
             // we need to make x and y varibales for b and g or else everything is pusshe dof
         Background.x = Game.x;
         Background.y = Game.y;
@@ -82,16 +64,17 @@ var Game = {
         Background.delta_y= - 0.5;
         // sprite source matching
         Garp1.img = new Image();
-        Garp1.img.src = "garpOne.png";
+        Garp1.img.src = "sprites/garpOne.png";
         Garp2.img = new Image();
-        Garp2.img.src = "garpOne.png";
+        Garp2.img.src = "sprites/garpOne.png";
         Garp3.img = new Image();
-        Garp3.img.src = "garpOne.png";
+        Garp3.img.src = "sprites/garpOne.png";
         Garp4.img = new Image();
-        Garp4.img.src = "garpOne.png";
+        Garp4.img.src = "sprites/garpOne.png";
+        availableCharacters.push(Garp1,Garp2,Garp3,Garp4);
         // player
         Player.img = new Image();
-        Player.img.src = "garpOne.png";
+        Player.img.src = "sprites/garpOne.png";
         // characters in play
         // so availbale characters still has 4 characters in play has 3
         availableCharacters[0].xPos= 350;
@@ -100,8 +83,8 @@ var Game = {
         Player.xPos = 200;
         Player.yPos = 300;
         charactersInPlay = [availableCharacters[0],availableCharacters[1],availableCharacters[2]];
-        console.log('available'+availableCharacters.length);
-        console.log('inplay'+charactersInPlay.length);
+        //console.log('available'+availableCharacters.length);
+        //console.log('inplay'+charactersInPlay.length);
         Game.mainLoop();
     },
     generateNew : function(){
@@ -109,6 +92,7 @@ var Game = {
         var toMove = availableCharacters[rand];
         toMove.xPos = 600;
         charactersInPlay.push(toMove);
+        availableCharacters = availableCharacters;
     },
 
     
@@ -155,7 +139,8 @@ var Game = {
                  console.log('collided');
                  
                  }
-            }
+            
+        } // end of for loop
 
        if(charactersInPlay.length < 3){
             Game.generateNew();
@@ -170,7 +155,8 @@ var Game = {
             // when drawing thing about it like back to front
             Game.drawBackground();
             Game.canvasContext.drawImage(Player.img,100,Player.yPos,Player.spriteW, Player.spriteH);
-            for(var a =0 ; a < charactersInPlay.length; a++){
+            for(var a = 0 ; a < charactersInPlay.length; a++){
+                console.log(charactersInPlay);
                 Game.canvasContext.drawImage(charactersInPlay[a].img,
                     // source rectangle
                     charactersInPlay[a].cycle * charactersInPlay[a].spriteW, 0, charactersInPlay[a].spriteW, 

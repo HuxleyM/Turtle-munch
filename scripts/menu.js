@@ -39,12 +39,12 @@ var Menu = {
         Menu.canvas = document.getElementById('myCanvas');
         Menu.canvasContext = Menu.canvas.getContext('2d');
         Ship.img = new Image();
-        Ship.img.src = "spaceship.png";
+        Ship.img.src = "sprites/spaceship.png";
         // adding cat and dog for button click
         Cat.img = new Image();
-        Cat.img.src = 'cat.png';
+        Cat.img.src = 'sprites/cat.png';
         Dog.img = new Image();
-        Dog.img.src = 'dog.png';
+        Dog.img.src = 'sprites/dog.png';
 
         Menu.controls();
 

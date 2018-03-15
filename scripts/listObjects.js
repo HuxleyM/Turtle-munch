@@ -6,19 +6,19 @@ function Sprite(spriteW, spriteH, cycle, frames, xPos, yPos) {
     this.spriteH = spriteH;
 	this.cycle = cycle;
 	this.frames = frames;
-	this.xPos = undefined;
-	this.yPos = undefined;
+	this.xPos = xPos;
+	this.yPos = yPos;
 }
 
 //------ initializing  sprites to play with
 var availableCharacters = [];
-var charactersInPlay = undefined;
-var Garp1 =  new Sprite(98,83,0,4,undefined,undefined);
-var Garp2 = new Sprite(40,83,0,4,undefined,undefined);
-var Garp3 = new Sprite(98,40,0,4,undefined,undefined);
-var Garp4 = new Sprite(50,50,0,4,undefined,undefined);
-var Player = new Sprite(98,83,0,1,undefined,undefined)
-availableCharacters.push(Garp1,Garp2,Garp3,Garp4);
+var charactersInPlay = [];
+var Garp1 =  new Sprite(98,83,0,4,600,200);
+var Garp2 = new Sprite(40,83,0,4,550,200);
+var Garp3 = new Sprite(98,40,0,4,560,300);
+var Garp4 = new Sprite(50,50,0,4,560,200);
+var Player = new Sprite(98,83,0,1,560,200)
+
 
 
 
