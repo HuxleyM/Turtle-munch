@@ -5,11 +5,37 @@ var Next ={
     canvas : undefined,
     canvasContext : undefined,
     nextMenuButtons : [],
+    //------- pairing to controls 
+      getMousePos : function(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+    },
+    checkClickOn : function(mouseX, mouseY) {
+        // if being closed change else to the rest of this
+        if(mouseX < NextBut.x + NextBut.bWidth &&
+            mouseX > NextBut.x &&
+            NextBut.y < mouseY  &&
+            NextBut.bHeight + NextBut.y > mouseY){
+                // if clicked start playing again.
+                    controlState('play');
+            }
+        },
+    
 
     start : function () 
     {     
         Next.canvas = document.getElementById('myCanvas');
         Next.canvasContext = Next.canvas.getContext('2d');
+
+        // adding next button
+         //adding start buttons
+         nextMenuButs.forEach(function(button){
+            button.img = new Image();
+            button.img.src = 'sprites/buttons.png';
+        });
       
 
         Next.controls();
@@ -28,8 +54,13 @@ var Next ={
     },
     draw : function () 
     {       //void ctx.drawImage(image, dx, dy, dWidth, dHeight);
-                //Next.canvasContext.drawImage(Ship.img, Ship.x, Ship.y, Ship.width, Ship.height);
-            
+        //Next.canvasContext.drawImage(Ship.img, Ship.x, Ship.y, Ship.width, Ship.height);
+        nextMenuButs.forEach(function(button){
+            if(button.draw == true){
+                Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
+                button.x, button.y, button.bWidth, button.bHeight);
+            }
+            })
     },
     mainLoop :function() {
         console.log('Next');
@@ -48,8 +79,8 @@ var Next ={
         //--- adding the mouse position features
         Next.canvas.addEventListener('mousedown', function(event) {
             var mousePos = Next.getMousePos(Next.canvas, event);
-            if(currentState == 'Next'){
-                Next.checkClickOnCat(mousePos.x,mousePos.y);
+            if(currentState == 'next'){
+                Next.checkClickOn(mousePos.x,mousePos.y);
             }
         }, false);
 

@@ -9,6 +9,7 @@ var Game = {
     delta_y: undefined,
     delta_x: undefined,
     score: 0,
+    charactersInPlay : [],
     start : function () 
     {     
         currentState = 'game';
@@ -16,7 +17,7 @@ var Game = {
         Game.canvasContext = Game.canvas.getContext('2d');
 
         Background.backgroundImage = new Image();
-        Background.backgroundImage.src='sprites/background.jpg';
+        Background.backgroundImage.src='backgrounds/play.png';
             // we need to make x and y varibales for b and g or else everything is pusshe dof
         Background.x = Game.x;
         Background.y = Game.y;
@@ -28,7 +29,9 @@ var Game = {
         // player
         Player.img = new Image();
         Player.img.src = "sprites/garpOne.png";
-      
+        //---
+        Game.charactersInPlay=[];
+
         Game.mainLoop();
     },
 
@@ -62,15 +65,15 @@ var Game = {
         if(Background.x <= - Background.maximumWidth){
             Background.x = Game.x;
         }   
-        for(var i = 0; i< charactersInPlay.length; i++){
-            charactersInPlay[i].xPos -= 5;
-            if(charactersInPlay[i].xPos < 0){
-                charactersInPlay.splice(i, 1);
+        for(var i = 0; i< Game.charactersInPlay.length; i++){
+            Game.charactersInPlay[i].xPos -= 5;
+            if(Game.charactersInPlay[i].xPos < 0){
+                Game.charactersInPlay.splice(i, 1);
             }    
-            if (Player.xPos < charactersInPlay[i].xPos + charactersInPlay[i].spriteW &&
-                Player.xPos + Player.spriteW  > charactersInPlay[i].xPos &&
-                Player.yPos < charactersInPlay[i].yPos + charactersInPlay[i].spriteH &&
-                Player.spriteH + Player.yPos >  charactersInPlay[i].yPos ){
+            if (Player.xPos < Game.charactersInPlay[i].xPos + Game.charactersInPlay[i].spriteW &&
+                Player.xPos + Player.spriteW  > Game.charactersInPlay[i].xPos &&
+                Player.yPos < Game.charactersInPlay[i].yPos + Game.charactersInPlay[i].spriteH &&
+                Player.spriteH + Player.yPos >  Game.charactersInPlay[i].yPos ){
                     // collision detected!
                     console.log('collided');
                 }  
@@ -85,14 +88,14 @@ var Game = {
         // when drawing thing about it like back to front
         Game.drawBackground();
         Game.canvasContext.drawImage(Player.img,100,Player.yPos,Player.spriteW, Player.spriteH);
-        for(var i = 0 ; i < charactersInPlay.length; i++){
-            console.log(charactersInPlay);
-            Game.canvasContext.drawImage(charactersInPlay[i].img,
+        for(var i = 0 ; i < Game.charactersInPlay.length; i++){
+            console.log(Game.charactersInPlay);
+            Game.canvasContext.drawImage(Game.charactersInPlay[i].img,
                 // source rectangle
-                charactersInPlay[i].cycle * charactersInPlay[i].spriteW, 0, charactersInPlay[i].spriteW, 
-                charactersInPlay[i].spriteH,
+                Game.charactersInPlay[i].cycle * Game.charactersInPlay[i].spriteW, 0, Game.charactersInPlay[i].spriteW, 
+                Game.charactersInPlay[i].spriteH,
                 // destination rectangle
-                charactersInPlay[i].xPos, charactersInPlay[i].yPos, charactersInPlay[i].spriteW, charactersInPlay[i].spriteH);   
+                Game.charactersInPlay[i].xPos, Game.charactersInPlay[i].yPos, Game.charactersInPlay[i].spriteW, Game.charactersInPlay[i].spriteH);   
             }    
     },
     mainLoop :  function() {
@@ -103,7 +106,7 @@ var Game = {
         // maths 
         //console.log('game Js');
         if(currentState == 'game'){
-            window.setTimeout(Game.mainLoop, 800 / 10);
+            window.setTimeout(Game.mainLoop, 900 / 25);
         }
     }
 }

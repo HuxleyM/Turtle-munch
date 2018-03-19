@@ -1,6 +1,25 @@
 var Over = {
     canvas : undefined,
     canvasContext : undefined,
+    //------- pairing to controls 
+    getMousePos : function(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+    },
+    checkClickOn : function(mouseX, mouseY) {
+        // if being closed change else to the rest of this
+        if(mouseX < NextBut.x + NextBut.bWidth &&
+            mouseX > NextBut.x &&
+            NextBut.y < mouseY  &&
+            NextBut.bHeight + NextBut.y > mouseY){
+                // if clicked start playing again.
+                    controlState('menu');
+            }
+        },
+    
     start : function () 
     {     
         Over.canvas = document.getElementById('myCanvas');
@@ -40,7 +59,7 @@ var Over = {
         Over.canvas.addEventListener('mousedown', function(event) {
             var mousePos = Over.getMousePos(Over.canvas, event);
             if(currentState == 'Over'){
-                Over.checkClickOnCat(mousePos.x,mousePos.y);
+                Over.checkClickOn(mousePos.x,mousePos.y);
             }
         }, false);
 
