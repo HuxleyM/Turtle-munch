@@ -44,14 +44,28 @@ canvas{
 				currentState ='game';
 
 			window.addEventListener('keydown', function(event){
+				var changeInTime = 1;
+					var velocity = 0;
+					var changeInPosition = 15;
+					var acceleration = 0;
+					//-- changing gavity
+					Game.gravity = 0;
 				if(event.keyCode == 32|| event.keyCode == 38){
+					// velocity = change in position over time
+					// acceleration = changeinspeed/time
+					changeInTime++;
+					acceleration += 6;
 					if(Player.y > 0){
-						Player.y -= 10;
+						// change in time increase at frame rate held down
+						
+						//velocity = changeInPosition/changeInTime;
+						Player.y -= acceleration;
 					}
 				}
 			},true);
 			window.addEventListener('keydown', function(event){
 				if(event.keyCode == 40){
+					
 					if(Player.y > 0){
 						Player.y += 10;
 					}
@@ -60,6 +74,7 @@ canvas{
 
 			window.addEventListener('keyup', function(event){
 				if(event.keyCode == 32 || event.keyCode == 38 || event.keyCode == 40){
+					Game.gravity = 2;
 					Player.y = Player.y;
 				}
 			},true);

@@ -17,9 +17,15 @@ StartBut =      new Button(200, 50, 0, 70, 200, 50, 200, 100),
 CreditsBut =    new Button(200, 50, 0, 130, 200, 50, 200, 156),
 AboutBut =      new Button(200, 50, 0, 184, 200, 50, 200, 210),
 NextBut =       new Button(200, 50, 0, 240, 200, 50, 200, 100),
-PlayAgainBut =  new Button(200, 50, 0, 298, 200, 50, 200, 100),
+PlayAgainBut =  new Button(200, 50, 0, 298, 200, 50, 200, 300),
 CloseBut =      new Button(54,  54, 76, 2, 50, 50, 300, 300),
 SoundBut =      new Button(60, 60, 0, 0, 30, 30, 550, 20);
+
+//--- making about boxes with the same constructor as buttons
+
+var
+AboutInfo =     new Button(200, 142, 360, 0, 200, 200, 200, 100);
+CreditsInfo =   new Button(200, 142, 505, 0, 200, 200, 200, 100);
 
 // we want our close button to not appear at first and only appear once triggered
 CloseBut.draw = false;
@@ -29,10 +35,12 @@ startMenuButs = [],
 nextMenuButs = [],
 generalButs = [],
 overMenuButs =[];
+info =[];
 generalButs.push(SoundBut,CloseBut);
 startMenuButs.push(StartBut,CreditsBut,AboutBut);
 nextMenuButs.push(NextBut);
 overMenuButs.push(PlayAgainBut);
+info.push(AboutInfo, CreditsInfo);
 
 //------------------------- made buttons
 //-------------------------  making info to go with buttons
@@ -58,7 +66,7 @@ function Character(sourceW, sourceH, sourceX, sourceY, bWidth, bHeight, x, y, cy
 
 // same constructor as button maker
  var 
- Player = new Character(200, 146, 0, 74, 100, 75, 130, 100, 0, 2 );
+ Player = new Character(200, 146, 0, 74, 100, 75, 100, 100, 0, 2 );
 
  function JellyFish(){
     this.name = 'jellyfish';
@@ -73,6 +81,8 @@ function Character(sourceW, sourceH, sourceX, sourceY, bWidth, bHeight, x, y, cy
     // sprites
     this.cycle = 0;
     this.frames = 8;
+    //movement
+    this.move = 0;
  }
 
  function Plastic(){
@@ -88,6 +98,8 @@ function Character(sourceW, sourceH, sourceX, sourceY, bWidth, bHeight, x, y, cy
     // sprites
     this.cycle = 0;
     this.frames = 1;
+    //movemnet
+    this.move = 0;
  }
 // starting enemies 2 jellfish 4 plastic
 var inPlay = [new JellyFish(), new JellyFish(), new Plastic(), new Plastic(), new Plastic()];

@@ -37,6 +37,9 @@ var Over = {
             button.img.src = 'sprites/buttons.png';
         });
     
+        //--- background
+        Background.img = new Image();
+        Background.img.src = 'backgrounds/dead.jpg';
 
         Over.controls();
         Over.mainLoop();
@@ -51,6 +54,8 @@ var Over = {
     draw : function () 
     {       //void ctx.drawImage(image, dx, dy, dWidth, dHeight);
                 //Over.canvasContext.drawImage(Ship.img, Ship.x, Ship.y, Ship.width, Ship.height);
+                Menu.canvasContext.drawImage(Background.img, 0, 0, Menu.canvas.width, Menu.canvas.height);
+
                 overMenuButs.forEach(function(button){
                     if(button.draw == true){
                         Over.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
@@ -68,6 +73,9 @@ var Over = {
                 Over.canvasContext.font = '80px sans-serif';
                 Over.canvasContext.textBaseline = 'top'; 
                 Over.canvasContext.fillText("GAME OVER", 50, 200);
+                Over.canvasContext.font = '40px sans-serif';
+                Over.canvasContext.textBaseline = 'top'; 
+                Over.canvasContext.fillText("your score: "+ Game.score , 50, 500);
             
     },
     mainLoop :function() {

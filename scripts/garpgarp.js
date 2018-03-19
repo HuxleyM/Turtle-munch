@@ -11,6 +11,11 @@ var Game = {
     maximumWidth: undefined,
     delta_y: undefined,
     delta_x: undefined,
+    gravity : 2,
+    inPlay : [],
+
+    //start with 3 lives
+    lives : 3,
     score: 0,
     frames : 0,
     start : function () 
@@ -34,8 +39,9 @@ var Game = {
         Player.img = new Image();
         Player.img.src = "sprites/gameChars.png";
         //---
+        Game.inPlay = inPlay;
          //adding general buttons (sound and close)
-        inPlay.forEach(function(Char){
+        Game.inPlay.forEach(function(Char){
             Char.img = new Image();
             Char.img.src = 'sprites/gameChars.png';
         });
@@ -54,7 +60,8 @@ var Game = {
         Game.canvasContext.font = '20px sans-serif';
         Game.canvasContext.textBaseline = 'top'; 
         Game.canvasContext.fillText("score " +Game.score, 200, 0);
-        Game.canvasContext.fillText("level " +level , 300, 0);
+        Game.canvasContext.fillText("level " +level , 50, 0);
+        Game.canvasContext.fillText("lives " +Game.lives , 350, 0);
     },
 
     clearCanvas : function () {
@@ -69,10 +76,26 @@ var Game = {
         else{
             Player.cycle = 1;
         }*/
-        Player.y += 2;
+        Player.y += Game.gravity;
         // frame count will instigate wehn to take to next screen
         Game.frames++
         Game.score++;
+
+        // move enemies
+        Game.inPlay.forEach(function(enemy){
+            // move charcter down
+            enemy.y += enemy.move;
+            // if charcter off screen move upwards
+            if(enemy.y+ enemy.bHeight > Game.canvas.height){
+                enemy.move = -enemy.move;
+            }
+            if(enemy.y - enemy.bHeight <  0 ){
+                enemy.move = + enemy.move;
+            }
+
+            
+        });
+       
 
         
         
@@ -86,8 +109,8 @@ var Game = {
         if(Background.x <= - Background.maximumWidth){
             Background.x = Game.x;
         }   
-        for(var i = 0; i < inPlay.length; i++){
-            var char = inPlay[i];
+        for(var i = 0; i < Game.inPlay.length; i++){
+            var char = Game.inPlay[i];
             char.x -= 5;
             if(char.x < 0){
                 char.x = Math.floor((Math.random()* 500)+600);
@@ -100,18 +123,23 @@ var Game = {
         if((Player.y + Player.spriteH) > Game.canvas.height){
             controlState('over');
          }  
-         inPlay.forEach(function(enemy){
+         Game.inPlay.forEach(function(enemy){
             if(Player.x < enemy.x + enemy.bWidth &&
                 Player.x + Player.bWidth > enemy.x &&
                 Player.y < enemy.y + enemy.bHeight &&
                 Player.bHeight + Player.y > enemy.y){
                     if(enemy.name == 'plastic'){
-                        controlState('over');
+                        Game.lives--;
+                        enemy.x = Math.floor((Math.random()* Game.canvas.width)+Game.canvas.width);
+                        enemy. y = Math.floor((Math.random()* Game.canvas.height) + enemy.bHeight );
+                        if(Game.lives == 0){
+                            controlState('over');
+                        }
                     }
                     else if(enemy.name == 'jellyfish'){
                         Game.score += 50;
                         // spawn elsewhere
-                        enemy.x = Math.floor((Math.random()* 500)+600);
+                        enemy.x = Math.floor((Math.random()* Game.canvas.width)+Game.canvas.width);
                         enemy. y = Math.floor((Math.random()* Game.canvas.height) + enemy.bHeight );
 
                     }
@@ -128,9 +156,9 @@ var Game = {
        
         Game.canvasContext.drawImage(Player.img, Player.sourceX + (Player.bWidth* Player.cycle), Player.sourceY, Player.sourceW, Player.sourceH,
             Player.x, Player.y, Player.bWidth, Player.bHeight);
-            console.log(Player.sourceX);
+  
         
-        inPlay.forEach(function(button){
+        Game.inPlay.forEach(function(button){
             Game.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
             button.x, button.y, button.bWidth, button.bHeight);
         })

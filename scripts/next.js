@@ -5,6 +5,7 @@ var Next ={
     canvas : undefined,
     canvasContext : undefined,
     nextMenuButtons : [],
+    
     //------- pairing to controls 
       getMousePos : function(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
@@ -36,8 +37,18 @@ var Next ={
             button.img = new Image();
             button.img.src = 'sprites/buttons.png';
         });
+        //-- adding to array for next level
         inPlay.push(new Plastic, new Plastic, new JellyFish);
-      
+
+        // if certain levels make some enemies move 
+        if(level == 3){
+            Game.inPlay.forEach(function(enemy){
+                enemy.move += 2;
+            })
+        }
+        //--- adding background
+        Background.img = new Image();
+        Background.img.src = 'backgrounds/next.jpg';
 
         Next.controls();
         Next.mainLoop();
@@ -54,7 +65,9 @@ var Next ={
         }
     },
     draw : function () 
-    {       //void ctx.drawImage(image, dx, dy, dWidth, dHeight);
+    {       
+        Menu.canvasContext.drawImage(Background.img, 0, 0, Menu.canvas.width, Menu.canvas.height);
+        //void ctx.drawImage(image, dx, dy, dWidth, dHeight);
         //Next.canvasContext.drawImage(Ship.img, Ship.x, Ship.y, Ship.width, Ship.height);
         nextMenuButs.forEach(function(button){
             if(button.draw == true){
@@ -64,7 +77,6 @@ var Next ={
             })
     },
     mainLoop :function() {
-        console.log('Next');
         Next.clearCanvas();
         Next.update();
         Next.draw();

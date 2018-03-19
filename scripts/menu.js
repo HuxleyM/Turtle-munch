@@ -4,6 +4,7 @@ var Menu = {
 	canvas : undefined,
     canvasContext : undefined,
 
+
     //------- pairing to controls 
     getMousePos : function(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
@@ -46,10 +47,10 @@ var Menu = {
                         controlState('play')
                     }
                     else if(button == CreditsBut){
-                        console.log('credits')
+                        CreditsInfo.draw = true;
                     }
                     else{
-                        console.log('about');
+                        AboutInfo.draw = true;;
                 }
             }
             }
@@ -60,15 +61,25 @@ var Menu = {
     start : function () 
     {     
         //-- starting the game again
-        
         Menu.canvas = document.getElementById('myCanvas');
         Menu.canvasContext = Menu.canvas.getContext('2d');
+
+        //--- background
+        Background.img = new Image();
+        Background.img.src = 'backgrounds/background.png';
         
         //adding start buttons
         startMenuButs.forEach(function(button){
             button.img = new Image();
             button.img.src = 'sprites/buttons.png';
             button.draw = true;
+        });
+
+        //adding info logs
+        info.forEach(function(button){
+            button.img = new Image();
+            button.img.src = 'sprites/buttons.png';
+            button.draw = false;
         });
 
         //adding general buttons (sound and close)
@@ -89,7 +100,8 @@ var Menu = {
         {   
     },
     draw : function () 
-{           
+{   
+    Menu.canvasContext.drawImage(Background.img, 0, 0, Menu.canvas.width, Menu.canvas.height);
   //void ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     startMenuButs.forEach(function(button){
     if(button.draw == true){
@@ -98,6 +110,13 @@ var Menu = {
     }
  })
     generalButs.forEach(function(button){
+        if(button.draw == true){
+            Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
+            button.x, button.y, button.bWidth, button.bHeight);
+        }
+    })
+
+    info.forEach(function(button){
         if(button.draw == true){
             Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
             button.x, button.y, button.bWidth, button.bHeight);
