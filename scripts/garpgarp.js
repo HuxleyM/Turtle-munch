@@ -63,7 +63,12 @@ var Game = {
 
     update : function () {
         // updating player sprite doesnt work....
-        Player.cycle = (Player.cycle + 1) % Player.frames;
+        /*if(Player.cycle < 4){
+            Player.cycle++;
+        }
+        else{
+            Player.cycle = 1;
+        }*/
         Player.y += 2;
         // frame count will instigate wehn to take to next screen
         Game.frames++
@@ -121,8 +126,9 @@ var Game = {
         // when drawing thing about it like back to front
         Game.drawBackground();
        
-        Game.canvasContext.drawImage(Player.img, Player.sourceX * Player.cycle, Player.sourceY, Player.sourceW, Player.sourceH,
+        Game.canvasContext.drawImage(Player.img, Player.sourceX + (Player.bWidth* Player.cycle), Player.sourceY, Player.sourceW, Player.sourceH,
             Player.x, Player.y, Player.bWidth, Player.bHeight);
+            console.log(Player.sourceX);
         
         inPlay.forEach(function(button){
             Game.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
