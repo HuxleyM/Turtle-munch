@@ -64,12 +64,13 @@ var Game = {
     update : function () {
         // updating player sprite doesnt work....
         Player.cycle = (Player.cycle + 1) % Player.frames;
-
+        Player.y += 2;
+        // frame count will instigate wehn to take to next screen
         Game.frames++
         Game.score++;
 
-        // buttons no longer working
-        Player.y += 2;
+        
+        
         if(Game.frames > (400 * level)){
             level++;
             controlState('next');
@@ -120,7 +121,7 @@ var Game = {
         // when drawing thing about it like back to front
         Game.drawBackground();
        
-        Game.canvasContext.drawImage(Player.img, Player.sourceX, Player.sourceY, Player.sourceW, Player.sourceH,
+        Game.canvasContext.drawImage(Player.img, Player.sourceX * Player.cycle, Player.sourceY, Player.sourceW, Player.sourceH,
             Player.x, Player.y, Player.bWidth, Player.bHeight);
         
         inPlay.forEach(function(button){
