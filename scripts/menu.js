@@ -59,6 +59,8 @@ var Menu = {
     
     start : function () 
     {     
+        //-- starting the game again
+        
         Menu.canvas = document.getElementById('myCanvas');
         Menu.canvasContext = Menu.canvas.getContext('2d');
         
@@ -66,6 +68,7 @@ var Menu = {
         startMenuButs.forEach(function(button){
             button.img = new Image();
             button.img.src = 'sprites/buttons.png';
+            button.draw = true;
         });
 
         //adding general buttons (sound and close)
@@ -109,7 +112,6 @@ var Menu = {
     Menu.draw();
     // more frames smoother however this depends on the resources of the machine, if unable it will be laggy
     // maths 
-    console.log('menu Js');
         if(currentState == 'menu'){
             window.setTimeout(Menu.mainLoop, 1000 / 10);
         }

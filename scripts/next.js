@@ -36,6 +36,7 @@ var Next ={
             button.img = new Image();
             button.img.src = 'sprites/buttons.png';
         });
+        inPlay.push(new Plastic, new Plastic, new JellyFish);
       
 
         Next.controls();

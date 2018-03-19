@@ -1,4 +1,7 @@
 "use strict";
+
+
+
 var Game = {
 	canvas : undefined,
     canvasContext : undefined, 
@@ -9,9 +12,10 @@ var Game = {
     delta_y: undefined,
     delta_x: undefined,
     score: 0,
-    charactersInPlay : [],
+    frames : 0,
     start : function () 
     {     
+        console.log('level is '+ level+ 'length is '+ inPlay.length );
         currentState = 'game';
         Game.canvas = document.getElementById('myCanvas');
         Game.canvasContext = Game.canvas.getContext('2d');
@@ -28,9 +32,13 @@ var Game = {
         Background.delta_y= - 0.5;
         // player
         Player.img = new Image();
-        Player.img.src = "sprites/garpOne.png";
+        Player.img.src = "sprites/gameChars.png";
         //---
-        Game.charactersInPlay=[];
+         //adding general buttons (sound and close)
+        inPlay.forEach(function(Char){
+            Char.img = new Image();
+            Char.img.src = 'sprites/gameChars.png';
+        });
 
         Game.mainLoop();
     },
@@ -45,7 +53,8 @@ var Game = {
         Game.canvasContext.fillStyle = '#fff';
         Game.canvasContext.font = '20px sans-serif';
         Game.canvasContext.textBaseline = 'top'; 
-        Game.canvasContext.fillText("score " +Game.score,200,0);
+        Game.canvasContext.fillText("score " +Game.score, 200, 0);
+        Game.canvasContext.fillText("level " +level , 300, 0);
     },
 
     clearCanvas : function () {
@@ -53,9 +62,15 @@ var Game = {
     },
 
     update : function () {
+        // updating player sprite doesnt work....
+        Player.cycle = (Player.cycle + 1) % Player.frames;
+
+        Game.frames++
         Game.score++;
-        Player.yPos+=2;
-        if(Game.score > (200 * level)){
+
+        // buttons no longer working
+        Player.y += 2;
+        if(Game.frames > (400 * level)){
             level++;
             controlState('next');
         }
@@ -65,38 +80,53 @@ var Game = {
         if(Background.x <= - Background.maximumWidth){
             Background.x = Game.x;
         }   
-        for(var i = 0; i< Game.charactersInPlay.length; i++){
-            Game.charactersInPlay[i].xPos -= 5;
-            if(Game.charactersInPlay[i].xPos < 0){
-                Game.charactersInPlay.splice(i, 1);
-            }    
-            if (Player.xPos < Game.charactersInPlay[i].xPos + Game.charactersInPlay[i].spriteW &&
-                Player.xPos + Player.spriteW  > Game.charactersInPlay[i].xPos &&
-                Player.yPos < Game.charactersInPlay[i].yPos + Game.charactersInPlay[i].spriteH &&
-                Player.spriteH + Player.yPos >  Game.charactersInPlay[i].yPos ){
-                    // collision detected!
-                    console.log('collided');
-                }  
-         } 
+        for(var i = 0; i < inPlay.length; i++){
+            var char = inPlay[i];
+            char.x -= 5;
+            if(char.x < 0){
+                char.x = Math.floor((Math.random()* 500)+600);
+                char. y = Math.floor((Math.random()* Game.canvas.height) + char.bHeight );
+            }
+        }   
+          
     },
     checkCollision: function(){
-        if((Player.yPos + Player.spriteH) > Game.canvas.height){
+        if((Player.y + Player.spriteH) > Game.canvas.height){
             controlState('over');
          }  
+         inPlay.forEach(function(enemy){
+            if(Player.x < enemy.x + enemy.bWidth &&
+                Player.x + Player.bWidth > enemy.x &&
+                Player.y < enemy.y + enemy.bHeight &&
+                Player.bHeight + Player.y > enemy.y){
+                    if(enemy.name == 'plastic'){
+                        controlState('over');
+                    }
+                    else if(enemy.name == 'jellyfish'){
+                        Game.score += 50;
+                        // spawn elsewhere
+                        enemy.x = Math.floor((Math.random()* 500)+600);
+                        enemy. y = Math.floor((Math.random()* Game.canvas.height) + enemy.bHeight );
+
+                    }
+                    else{
+                        // do something
+                    };
+                    
+                }
+         })
     },
     draw : function (){ 
         // when drawing thing about it like back to front
         Game.drawBackground();
-        Game.canvasContext.drawImage(Player.img,100,Player.yPos,Player.spriteW, Player.spriteH);
-        for(var i = 0 ; i < Game.charactersInPlay.length; i++){
-            console.log(Game.charactersInPlay);
-            Game.canvasContext.drawImage(Game.charactersInPlay[i].img,
-                // source rectangle
-                Game.charactersInPlay[i].cycle * Game.charactersInPlay[i].spriteW, 0, Game.charactersInPlay[i].spriteW, 
-                Game.charactersInPlay[i].spriteH,
-                // destination rectangle
-                Game.charactersInPlay[i].xPos, Game.charactersInPlay[i].yPos, Game.charactersInPlay[i].spriteW, Game.charactersInPlay[i].spriteH);   
-            }    
+       
+        Game.canvasContext.drawImage(Player.img, Player.sourceX, Player.sourceY, Player.sourceW, Player.sourceH,
+            Player.x, Player.y, Player.bWidth, Player.bHeight);
+        
+        inPlay.forEach(function(button){
+            Game.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
+            button.x, button.y, button.bWidth, button.bHeight);
+        })
     },
     mainLoop :  function() {
         Game.clearCanvas();

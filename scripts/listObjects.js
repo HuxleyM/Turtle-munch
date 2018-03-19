@@ -41,7 +41,53 @@ overMenuButs.push(PlayAgainBut);
 var Background ={
     // this is empty for now, and is intialized in the game object.
 }
+function Character(sourceW, sourceH, sourceX, sourceY, bWidth, bHeight, x, y, cycle, frames) {
+    this.sourceW = sourceW;
+    this.sourceH = sourceH;
+	this.sourceX = sourceX;
+    this.sourceY = sourceY;
+    this.bWidth = bWidth;
+    this.bHeight = bHeight;
+    this.x = x;
+    this.y = y;
+    // sprites
+    this.cycle = cycle;
+    this.frames = frames;
 
-var Player = {
- 
 }
+
+// same constructor as button maker
+ var 
+ Player = new Character(200, 146, 0, 74, 100, 75, 130, 100, 0, 2 );
+
+ function JellyFish(){
+    this.name = 'jellyfish';
+    this.sourceW = 100;
+    this.sourceH = 112;
+	this.sourceX = 0;
+    this.sourceY = 250;
+    this.bWidth = 50;
+    this.bHeight = 50;
+    this.x = Math.floor((Math.random()*600) + (300));
+    this.y = Math.floor((Math.random()*500)+1);
+    // sprites
+    this.cycle = 0;
+    this.frames = 8;
+ }
+
+ function Plastic(){
+    this.name = 'plastic';
+    this.sourceW = 60;
+    this.sourceH = 70;
+	this.sourceX = 0;
+    this.sourceY = 0;
+    this.bWidth = 60;
+    this.bHeight = 60;
+    this.x = Math.floor((Math.random()*600) + (300));
+    this.y = Math.floor((Math.random()*500)+1);
+    // sprites
+    this.cycle = 0;
+    this.frames = 1;
+ }
+// starting enemies 2 jellfish 4 plastic
+var inPlay = [new JellyFish(), new JellyFish(), new Plastic(), new Plastic(), new Plastic()];

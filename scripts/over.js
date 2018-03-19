@@ -3,7 +3,7 @@ var Over = {
     canvasContext : undefined,
     //------- pairing to controls 
     getMousePos : function(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
+        var rect = Over.canvas.getBoundingClientRect();
         return {
             x: evt.clientX - rect.left,
             y: evt.clientY - rect.top
@@ -11,12 +11,12 @@ var Over = {
     },
     checkClickOn : function(mouseX, mouseY) {
         // if being closed change else to the rest of this
-        if(mouseX < NextBut.x + NextBut.bWidth &&
-            mouseX > NextBut.x &&
-            NextBut.y < mouseY  &&
-            NextBut.bHeight + NextBut.y > mouseY){
-                // if clicked start playing again.
-                    controlState('menu');
+        if(mouseX < PlayAgainBut.x + PlayAgainBut.bWidth &&
+            mouseX > PlayAgainBut.x &&
+            PlayAgainBut.y < mouseY  &&
+            PlayAgainBut.bHeight + PlayAgainBut.y > mouseY){
+                // this restarts the game, automatically pointing to menu start
+                    location.reload(true);  
             }
         },
     
@@ -24,7 +24,19 @@ var Over = {
     {     
         Over.canvas = document.getElementById('myCanvas');
         Over.canvasContext = Over.canvas.getContext('2d');
-      
+        CloseBut.draw = false;
+         //adding start buttons
+         overMenuButs.forEach(function(button){
+            button.img = new Image();
+            button.img.src = 'sprites/buttons.png';
+        });
+
+        //adding general buttons (sound and close)
+        generalButs.forEach(function(button){
+            button.img = new Image();
+            button.img.src = 'sprites/buttons.png';
+        });
+    
 
         Over.controls();
         Over.mainLoop();
@@ -39,10 +51,26 @@ var Over = {
     draw : function () 
     {       //void ctx.drawImage(image, dx, dy, dWidth, dHeight);
                 //Over.canvasContext.drawImage(Ship.img, Ship.x, Ship.y, Ship.width, Ship.height);
+                overMenuButs.forEach(function(button){
+                    if(button.draw == true){
+                        Over.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
+                        button.x, button.y, button.bWidth, button.bHeight);
+                    }
+                 })
+                generalButs.forEach(function(button){
+                    if(button.draw == true){
+                        Over.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
+                        button.x, button.y, button.bWidth, button.bHeight);
+                    }
+                })
+                
+                Over.canvasContext.fillStyle = '#fff';
+                Over.canvasContext.font = '80px sans-serif';
+                Over.canvasContext.textBaseline = 'top'; 
+                Over.canvasContext.fillText("GAME OVER", 50, 200);
             
     },
     mainLoop :function() {
-        console.log('Over');
         Over.clearCanvas();
         Over.update();
         Over.draw();
@@ -58,7 +86,7 @@ var Over = {
         //--- adding the mouse position features
         Over.canvas.addEventListener('mousedown', function(event) {
             var mousePos = Over.getMousePos(Over.canvas, event);
-            if(currentState == 'Over'){
+            if(currentState == 'over'){
                 Over.checkClickOn(mousePos.x,mousePos.y);
             }
         }, false);
