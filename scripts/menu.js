@@ -3,6 +3,9 @@
 var Menu = {
 	canvas : undefined,
     canvasContext : undefined,
+    startMenuButtons : [],
+
+
 
     //------- pairing to controls 
     getMousePos : function(canvas, evt) {
@@ -38,44 +41,34 @@ var Menu = {
     {     
         Menu.canvas = document.getElementById('myCanvas');
         Menu.canvasContext = Menu.canvas.getContext('2d');
-        Ship.img = new Image();
-        Ship.img.src = "sprites/spaceship.png";
-        // adding cat and dog for button click
-        Cat.img = new Image();
-        Cat.img.src = 'sprites/cat.png';
-        Dog.img = new Image();
-        Dog.img.src = 'sprites/dog.png';
-
+        
+        //adding buttons
+        startMenuButs.forEach(function(button){
+            button.img = new Image();
+            button.img.src = 'buttons.png';
+        });
+        
         Menu.controls();
-
         Menu.mainLoop();
     },
     clearCanvas : function () {
         Menu.canvasContext.clearRect(0, 0, Menu.canvas.width, Menu.canvas.height);
     },
     update : function () 
-{   
-	// ades says ' that remeber
-    // Menu.cycle adding plus one everytime updatetakes places, then modulus - remainder divide by 'computer' number of frames
-    /*Ship.y-= 10;
-    if (Ship.y + Ship.height < 0){
-        Game.start();
-        currentState = 'game';
-        return;
-    }
-    else{
-        
-    }*/
-},
+        {   
+    },
     draw : function () 
-{       //void ctx.drawImage(image, dx, dy, dWidth, dHeight);
-            //Menu.canvasContext.drawImage(Ship.img, Ship.x, Ship.y, Ship.width, Ship.height);
-            Menu.canvasContext.drawImage(Cat.img, Cat.x, Cat.y, Cat.width, Cat.height);
-            Menu.canvasContext.drawImage(Dog.img, Dog.x, Dog.y, Dog.width, Dog.height);
+{  
+           for(var i = 0; i < startMenuButs;i++){
+               var button = startMenuButs[i];
+               Menu.canvasContext.drawImage(button.img, 
+               button.sourceX, button.sourceY, button.sourceWidth, button.sourceHeight,
+               200, 100, 200, 100
+             );
+           }
             
 },
   mainLoop :function() {
-    console.log('menu');
     Menu.clearCanvas();
     Menu.update();
     Menu.draw();

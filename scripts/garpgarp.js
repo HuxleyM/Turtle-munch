@@ -1,28 +1,4 @@
 "use strict";
-
-
-
-
-//  key controls
-  //---- key controls here for now but will be moved... these controls need to be matched to states.. 
-  // or else his is all just  a bit messy
-  window.addEventListener('keydown', function(event){
-    if(event.keyCode == Game.keys.SP || event.keyCode == Game.keys.UA){
-        if(Player.yPos > 0){
-            Player.yPos-=5;
-        }
-    }
-  },true);
-
-  window.addEventListener('keyup', function(event){
-    if(event.keyCode == Game.keys.SP || event.keyCode == Game.keys.UA){
-        Player.yPos = Player.yPos;
-    }
-  },true);
-  
-
-
-
 var Game = {
 	canvas : undefined,
     canvasContext : undefined, 
@@ -32,26 +8,13 @@ var Game = {
     maximumWidth: undefined,
     delta_y: undefined,
     delta_x: undefined,
-    keys: {
-        UA:38,  SB:40, //SB = space bar
-    },
     score: 0,
-  
-    randomizeYPos: function(){
-        return Math.floor((Math.random() * Game.canvas.height) + 1);
-    },
-    checkCollision: function(){
-        if((Player.yPos + Player.spriteH) > Game.canvas.height){
-            controlState('over');
-        }
-         
-        
-    },
     start : function () 
     {     
         currentState = 'game';
         Game.canvas = document.getElementById('myCanvas');
         Game.canvasContext = Game.canvas.getContext('2d');
+
         Background.backgroundImage = new Image();
         Background.backgroundImage.src='sprites/background.jpg';
             // we need to make x and y varibales for b and g or else everything is pusshe dof
@@ -62,40 +25,13 @@ var Game = {
         Background.maximumHeight = Game.canvas.height;
         Background.delta_x= - 5; ///--------------------------- changed this for object
         Background.delta_y= - 0.5;
-        // sprite source matching
-        Garp1.img = new Image();
-        Garp1.img.src = "sprites/garpOne.png";
-        Garp2.img = new Image();
-        Garp2.img.src = "sprites/garpOne.png";
-        Garp3.img = new Image();
-        Garp3.img.src = "sprites/garpOne.png";
-        Garp4.img = new Image();
-        Garp4.img.src = "sprites/garpOne.png";
-        availableCharacters.push(Garp1,Garp2,Garp3,Garp4);
         // player
         Player.img = new Image();
         Player.img.src = "sprites/garpOne.png";
-        // characters in play
-        // so availbale characters still has 4 characters in play has 3
-        availableCharacters[0].xPos= 350;
-        availableCharacters[1].xPos = 450;
-        availableCharacters[2].xPos = 600;
-        Player.xPos = 200;
-        Player.yPos = 300;
-        charactersInPlay = [availableCharacters[0],availableCharacters[1],availableCharacters[2]];
-        //console.log('available'+availableCharacters.length);
-        //console.log('inplay'+charactersInPlay.length);
+      
         Game.mainLoop();
     },
-    generateNew : function(){
-        var rand = Math.floor(Math.random() * availableCharacters.length);
-        var toMove = availableCharacters[rand];
-        toMove.xPos = 600;
-        charactersInPlay.push(toMove);
-        availableCharacters = availableCharacters;
-    },
 
-    
 
     drawBackground : function(){
         // width thats been defined i the background object is now being changed to the actual width of the image.
@@ -108,23 +44,24 @@ var Game = {
         Game.canvasContext.textBaseline = 'top'; 
         Game.canvasContext.fillText("score " +Game.score,200,0);
     },
+
     clearCanvas : function () {
         Game.canvasContext.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
     },
-    update : function () 
-{       Game.score++;
+
+    update : function () {
+        Game.score++;
+        Player.yPos+=2;
         if(Game.score > (200 * level)){
             level++;
             controlState('next');
         }
         Game.checkCollision();
-        Player.yPos+=2;
+        
         Background.x += Background.delta_x;
-        // if background distancex is greater then backgrounds maximum width then start again!
         if(Background.x <= - Background.maximumWidth){
             Background.x = Game.x;
         }   
-
         for(var i = 0; i< charactersInPlay.length; i++){
             charactersInPlay[i].xPos -= 5;
             if(charactersInPlay[i].xPos < 0){
@@ -133,38 +70,31 @@ var Game = {
             if (Player.xPos < charactersInPlay[i].xPos + charactersInPlay[i].spriteW &&
                 Player.xPos + Player.spriteW  > charactersInPlay[i].xPos &&
                 Player.yPos < charactersInPlay[i].yPos + charactersInPlay[i].spriteH &&
-                Player.spriteH + Player.yPos >  charactersInPlay[i].yPos )
-                 {
-                 // collision detected!
-                 console.log('collided');
-                 
-                 }
-            
-        } // end of for loop
-
-       if(charactersInPlay.length < 3){
-            Game.generateNew();
-        }
-        
-        
-        
-    
-},
-    draw : function () 
-{ 
-            // when drawing thing about it like back to front
-            Game.drawBackground();
-            Game.canvasContext.drawImage(Player.img,100,Player.yPos,Player.spriteW, Player.spriteH);
-            for(var a = 0 ; a < charactersInPlay.length; a++){
-                console.log(charactersInPlay);
-                Game.canvasContext.drawImage(charactersInPlay[a].img,
-                    // source rectangle
-                    charactersInPlay[a].cycle * charactersInPlay[a].spriteW, 0, charactersInPlay[a].spriteW, 
-                    charactersInPlay[a].spriteH,
-                    // destination rectangle
-                    charactersInPlay[a].xPos, charactersInPlay[a].yPos, charactersInPlay[a].spriteW, charactersInPlay[a].spriteH);   
+                Player.spriteH + Player.yPos >  charactersInPlay[i].yPos ){
+                    // collision detected!
+                    console.log('collided');
+                }  
+         } 
+    },
+    checkCollision: function(){
+        if((Player.yPos + Player.spriteH) > Game.canvas.height){
+            controlState('over');
+         }  
+    },
+    draw : function (){ 
+        // when drawing thing about it like back to front
+        Game.drawBackground();
+        Game.canvasContext.drawImage(Player.img,100,Player.yPos,Player.spriteW, Player.spriteH);
+        for(var i = 0 ; i < charactersInPlay.length; i++){
+            console.log(charactersInPlay);
+            Game.canvasContext.drawImage(charactersInPlay[i].img,
+                // source rectangle
+                charactersInPlay[i].cycle * charactersInPlay[i].spriteW, 0, charactersInPlay[i].spriteW, 
+                charactersInPlay[i].spriteH,
+                // destination rectangle
+                charactersInPlay[i].xPos, charactersInPlay[i].yPos, charactersInPlay[i].spriteW, charactersInPlay[i].spriteH);   
             }    
-},
+    },
     mainLoop :  function() {
         Game.clearCanvas();
         Game.update();

@@ -4,6 +4,7 @@ var tempTimer = 0;
 var Next ={
     canvas : undefined,
     canvasContext : undefined,
+    nextMenuButtons : [],
 
     start : function () 
     {     
