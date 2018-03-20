@@ -24,6 +24,9 @@ var Menu = {
                 startMenuButs.forEach(function(button){
                     button.draw = true;
                 });
+                info.forEach(function(button){
+                    button.draw = false;
+                });
                 // change close button to true
                 CloseBut.draw = false;
         }
@@ -47,7 +50,9 @@ var Menu = {
                         controlState('play')
                     }
                     else if(button == CreditsBut){
+                       
                         CreditsInfo.draw = true;
+                        console.log('assigning');
                     }
                     else{
                         AboutInfo.draw = true;;
@@ -103,6 +108,13 @@ var Menu = {
 {   
     Menu.canvasContext.drawImage(Background.img, 0, 0, Menu.canvas.width, Menu.canvas.height);
   //void ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+  info.forEach(function(button){
+    if(button.draw == true){
+        Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
+        button.x, button.y, button.bWidth, button.bHeight);
+    }
+})
+
     startMenuButs.forEach(function(button){
     if(button.draw == true){
         Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
@@ -116,13 +128,7 @@ var Menu = {
         }
     })
 
-    info.forEach(function(button){
-        if(button.draw == true){
-            Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
-            button.x, button.y, button.bWidth, button.bHeight);
-        }
-    })
-
+   
             
 },
   mainLoop :function() {

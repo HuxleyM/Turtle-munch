@@ -41,9 +41,9 @@ var Next ={
         inPlay.push(new Plastic, new Plastic, new JellyFish);
 
         // if certain levels make some enemies move 
-        if(level == 3){
+        if(level % 4 == 0){
             Game.inPlay.forEach(function(enemy){
-                enemy.move += 2;
+                enemy.move += 1.5;
             })
         }
         //--- adding background

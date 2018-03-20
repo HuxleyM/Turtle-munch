@@ -69,7 +69,7 @@ var Over = {
                     }
                 })
                 
-                Over.canvasContext.fillStyle = '#fff';
+                Over.canvasContext.fillStyle = '#000';
                 Over.canvasContext.font = '80px sans-serif';
                 Over.canvasContext.textBaseline = 'top'; 
                 Over.canvasContext.fillText("GAME OVER", 50, 200);

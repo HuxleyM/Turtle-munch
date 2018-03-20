@@ -1,7 +1,4 @@
 "use strict";
-
-
-
 var Game = {
 	canvas : undefined,
     canvasContext : undefined, 
@@ -69,19 +66,20 @@ var Game = {
     },
 
     update : function () {
-        // updating player sprite doesnt work....
-        /*if(Player.cycle < 4){
-            Player.cycle++;
-        }
-        else{
-            Player.cycle = 1;
-        }*/
+        // updating Sprite movements.
+        Player.cycle = (Player.cycle + 1) % Player.frames;
+        inPlay.forEach(function(enemy){
+            enemy.cycle = (enemy.cycle + 1) % enemy.frames;
+        })
+
+        // gravity acting on turtle
         Player.y += Game.gravity;
         // frame count will instigate wehn to take to next screen
         Game.frames++
         Game.score++;
 
-        // move enemies
+        // as levels progress, the next menu will give enemies additional up and down movement values.
+        // this loop will run and move the characters the movement value assigned
         Game.inPlay.forEach(function(enemy){
             // move charcter down
             enemy.y += enemy.move;
@@ -92,37 +90,44 @@ var Game = {
             if(enemy.y - enemy.bHeight <  0 ){
                 enemy.move = + enemy.move;
             }
-
-            
         });
        
 
-        
-        
+        // Level controller, level is decided by the game.Frames being greater
+        // then the level
         if(Game.frames > (400 * level)){
             level++;
             controlState('next');
         }
+
+        // -- checkinkg charcters havent collided
         Game.checkCollision();
         
+
+        //-- updating the moving background
         Background.x += Background.delta_x;
         if(Background.x <= - Background.maximumWidth){
             Background.x = Game.x;
         }   
+        //-- this moves the chacters along the screen, 
+        // -- if x becomes less then zero, offscreen, respawn the charcter further on in the game.
         for(var i = 0; i < Game.inPlay.length; i++){
             var char = Game.inPlay[i];
             char.x -= 5;
             if(char.x < 0){
-                char.x = Math.floor((Math.random()* 500)+600);
+                char.x = Math.floor((Math.random()* Game.canvas.width)+ Game.canvas.width);
                 char. y = Math.floor((Math.random()* Game.canvas.height) + char.bHeight );
             }
         }   
-          
     },
+
     checkCollision: function(){
-        if((Player.y + Player.spriteH) > Game.canvas.height){
+        // if drops to bottom of screen then game over instantly
+        if((Player.y + Player.bHeight) > Game.canvas.height){
             controlState('over');
          }  
+
+        // checking no charcters collide with player
          Game.inPlay.forEach(function(enemy){
             if(Player.x < enemy.x + enemy.bWidth &&
                 Player.x + Player.bWidth > enemy.x &&
@@ -154,12 +159,12 @@ var Game = {
         // when drawing thing about it like back to front
         Game.drawBackground();
        
-        Game.canvasContext.drawImage(Player.img, Player.sourceX + (Player.bWidth* Player.cycle), Player.sourceY, Player.sourceW, Player.sourceH,
+        Game.canvasContext.drawImage(Player.img, Player.sourceX + (Player.sourceW * Player.cycle), Player.sourceY, Player.sourceW, Player.sourceH,
             Player.x, Player.y, Player.bWidth, Player.bHeight);
   
         
         Game.inPlay.forEach(function(button){
-            Game.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
+            Game.canvasContext.drawImage(button.img, button.sourceX + (button.sourceW * button.cycle), button.sourceY, button.sourceW, button.sourceH,
             button.x, button.y, button.bWidth, button.bHeight);
         })
     },
@@ -169,9 +174,8 @@ var Game = {
         Game.draw();
         // more frames smoother however this depends on the resources of the machine, if unable it will be laggy
         // maths 
-        //console.log('game Js');
         if(currentState == 'game'){
-            window.setTimeout(Game.mainLoop, 900 / 25);
+            window.setTimeout(Game.mainLoop, 1000 / 20);
         }
     }
 }

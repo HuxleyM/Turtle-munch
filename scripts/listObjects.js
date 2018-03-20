@@ -23,9 +23,9 @@ SoundBut =      new Button(60, 60, 0, 0, 30, 30, 550, 20);
 
 //--- making about boxes with the same constructor as buttons
 
-var
-AboutInfo =     new Button(200, 142, 360, 0, 200, 200, 200, 100);
-CreditsInfo =   new Button(200, 142, 505, 0, 200, 200, 200, 100);
+var 
+CreditsInfo =     new Button(200, 142, 0, 360, 300, 200, 150, 100),
+AboutInfo =   new Button(200, 142, 0, 505, 300, 200, 150, 100);
 
 // we want our close button to not appear at first and only appear once triggered
 CloseBut.draw = false;
@@ -49,6 +49,7 @@ info.push(AboutInfo, CreditsInfo);
 var Background ={
     // this is empty for now, and is intialized in the game object.
 }
+//-- initializing character variables
 function Character(sourceW, sourceH, sourceX, sourceY, bWidth, bHeight, x, y, cycle, frames) {
     this.sourceW = sourceW;
     this.sourceH = sourceH;
@@ -66,7 +67,7 @@ function Character(sourceW, sourceH, sourceX, sourceY, bWidth, bHeight, x, y, cy
 
 // same constructor as button maker
  var 
- Player = new Character(200, 146, 0, 74, 100, 75, 100, 100, 0, 2 );
+ Player = new Character(200, 146, 0, 74, 100, 75, 100, 100, 0, 4 );
 
  function JellyFish(){
     this.name = 'jellyfish';
