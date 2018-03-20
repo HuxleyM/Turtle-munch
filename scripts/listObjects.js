@@ -1,4 +1,4 @@
-
+"use strict"
 //---------- making buttons
 function Button(sourceW, sourceH, sourceX, sourceY, bWidth, bHeight, x, y) {
     this.sourceW = sourceW;
@@ -34,7 +34,7 @@ var
 startMenuButs = [],
 nextMenuButs = [],
 generalButs = [],
-overMenuButs =[];
+overMenuButs =[],
 info =[];
 generalButs.push(SoundBut,CloseBut);
 startMenuButs.push(StartBut,CreditsBut,AboutBut);

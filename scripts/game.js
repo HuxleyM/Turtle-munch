@@ -1,4 +1,5 @@
 "use strict";
+
 var Game = {
 	canvas : undefined,
     canvasContext : undefined, 
@@ -11,26 +12,31 @@ var Game = {
     gravity : 2,
     inPlay : [],
 
+    // building in game notifications
+    notification : '',
+    notificationPost : undefined,
+    notificationTimer: 0,
+
     //start with 3 lives
     lives : 3,
     score: 0,
     frames : 0,
     start : function () 
     {     
-        console.log('level is '+ level+ 'length is '+ inPlay.length );
+        // controlling the switch statement.
         currentState = 'game';
         Game.canvas = document.getElementById('myCanvas');
         Game.canvasContext = Game.canvas.getContext('2d');
 
         Background.backgroundImage = new Image();
         Background.backgroundImage.src='backgrounds/play.png';
-            // we need to make x and y varibales for b and g or else everything is pusshe dof
+            // we need to make x and y varibales for b and g or else everything is pushe dof
         Background.x = Game.x;
         Background.y = Game.y;
         //the global varibales will automatically append as they are not in any object.
         Background.maximumWidth = Game.canvas.width;
         Background.maximumHeight = Game.canvas.height;
-        Background.delta_x= - 5; ///--------------------------- changed this for object
+        Background.delta_x= - 5; ///--------------------------- changed Game for object
         Background.delta_y= - 0.5;
         // player
         Player.img = new Image();
@@ -59,6 +65,11 @@ var Game = {
         Game.canvasContext.fillText("score " +Game.score, 200, 0);
         Game.canvasContext.fillText("level " +level , 50, 0);
         Game.canvasContext.fillText("lives " +Game.lives , 350, 0);
+        // any notification i.e. lost life or plus 50 go here
+        Game.canvasContext.font = '40px sans-serif';
+        if(Game.notificationPost){
+            Game.canvasContext.fillText(Game.notification , 200, 50);
+        }
     },
 
     clearCanvas : function () {
@@ -79,7 +90,7 @@ var Game = {
         Game.score++;
 
         // as levels progress, the next menu will give enemies additional up and down movement values.
-        // this loop will run and move the characters the movement value assigned
+        // Game loop will run and move the characters the movement value assigned
         Game.inPlay.forEach(function(enemy){
             // move charcter down
             enemy.y += enemy.move;
@@ -91,6 +102,18 @@ var Game = {
                 enemy.move = + enemy.move;
             }
         });
+
+        //controlling notifications
+        if(Game.notificationPost){
+            Game.notificationTimer++;
+            console.log(Game.notificationTimer);
+        }
+        // if 50 frames passed remove notice
+        if(Game.notificationTimer == 50){
+            Game.notification='';
+            Game.notificationTimer = 0;
+            Game.notificationPost = false;
+        }
        
 
         // Level controller, level is decided by the game.Frames being greater
@@ -109,7 +132,7 @@ var Game = {
         if(Background.x <= - Background.maximumWidth){
             Background.x = Game.x;
         }   
-        //-- this moves the chacters along the screen, 
+        //-- Game moves the chacters along the screen, 
         // -- if x becomes less then zero, offscreen, respawn the charcter further on in the game.
         for(var i = 0; i < Game.inPlay.length; i++){
             var char = Game.inPlay[i];
@@ -134,6 +157,10 @@ var Game = {
                 Player.y < enemy.y + enemy.bHeight &&
                 Player.bHeight + Player.y > enemy.y){
                     if(enemy.name == 'plastic'){
+                        // setting notifications
+                        Game.notification = 'lost a life!';
+                        Game.notificationPost = true;
+
                         Game.lives--;
                         enemy.x = Math.floor((Math.random()* Game.canvas.width)+Game.canvas.width);
                         enemy. y = Math.floor((Math.random()* Game.canvas.height) + enemy.bHeight );
@@ -142,6 +169,10 @@ var Game = {
                         }
                     }
                     else if(enemy.name == 'jellyfish'){
+                        // setting notifications
+                        Game.notification = ' yummy! +50';
+                        Game.notificationPost = true;
+
                         Game.score += 50;
                         // spawn elsewhere
                         enemy.x = Math.floor((Math.random()* Game.canvas.width)+Game.canvas.width);
@@ -163,16 +194,16 @@ var Game = {
             Player.x, Player.y, Player.bWidth, Player.bHeight);
   
         
-        Game.inPlay.forEach(function(button){
-            Game.canvasContext.drawImage(button.img, button.sourceX + (button.sourceW * button.cycle), button.sourceY, button.sourceW, button.sourceH,
-            button.x, button.y, button.bWidth, button.bHeight);
+        Game.inPlay.forEach(function(enemy){
+            Game.canvasContext.drawImage(enemy.img, enemy.sourceX + (enemy.sourceW * enemy.cycle), enemy.sourceY, enemy.sourceW, enemy.sourceH,
+            enemy.x, enemy.y, enemy.bWidth, enemy.bHeight);
         })
     },
     mainLoop :  function() {
         Game.clearCanvas();
         Game.update();
         Game.draw();
-        // more frames smoother however this depends on the resources of the machine, if unable it will be laggy
+        // more frames smoother however Game depends on the resources of the machine, if unable it will be laggy
         // maths 
         if(currentState == 'game'){
             window.setTimeout(Game.mainLoop, 1000 / 20);

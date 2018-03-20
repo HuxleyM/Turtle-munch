@@ -1,10 +1,10 @@
-
-var tempTimer = 0;
+"use strict"
 
 var Next ={
     canvas : undefined,
     canvasContext : undefined,
-    nextMenuButtons : [],
+    //timer for saying how long to be in next level state
+    timer : 0,
     
     //------- pairing to controls 
       getMousePos : function(canvas, evt) {
@@ -58,8 +58,8 @@ var Next ={
     },
     update : function () 
     {   
-        tempTimer++;
-        if(tempTimer>200){
+        Next.timer ++;
+        if(Next.timer > 100){
             level++;
             controlState('play');
         }

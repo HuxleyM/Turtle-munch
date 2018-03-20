@@ -1,3 +1,5 @@
+"use strict"
+
 var Over = {
     canvas : undefined,
     canvasContext : undefined,

@@ -5,7 +5,7 @@
 <meta charset ='UTF-8'>
 <title>Garp garp</title>
 <script src="scripts/listObjects.js"></script>
-<script src="scripts/garpgarp.js"></script>
+<script src="scripts/game.js"></script>
 <script src="scripts/menu.js"></script>
 <script src="scripts/next.js"></script>
 <script src="scripts/over.js"></script>
@@ -44,12 +44,11 @@ canvas{
 				currentState ='game';
 
 			window.addEventListener('keydown', function(event){
-				var changeInTime = 1;
-					var velocity = 0;
-					var changeInPosition = 15;
-					var acceleration = 0;
-					//-- changing gavity
-					Game.gravity = 0;
+				var 
+				changeInTime = 1,
+				acceleration = 0;
+				//-- changing gavity
+				Game.gravity = 0;
 				if(event.keyCode == 32|| event.keyCode == 38){
 					// velocity = change in position over time
 					// acceleration = changeinspeed/time
@@ -65,7 +64,6 @@ canvas{
 			},true);
 			window.addEventListener('keydown', function(event){
 				if(event.keyCode == 40){
-					
 					if(Player.y > 0){
 						Player.y += 10;
 					}
@@ -92,12 +90,7 @@ canvas{
 			default:
 				console.log('state not recognised');
 		}
-
 	}
-
-
-   
-
-	// swithc statement to control the state of the application */
+// swithc statement to control the state of the application */
 </script>
 </html>
