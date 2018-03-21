@@ -14,7 +14,7 @@ var Menu = {
         };
     },
 
-    checkClickOnCat : function(mouseX, mouseY) {
+    checkClickOn : function(mouseX, mouseY) {
         // if being closed change else to the rest of this
         if(mouseX < CloseBut.x + CloseBut.bWidth &&
             mouseX > CloseBut.x &&
@@ -121,15 +121,13 @@ var Menu = {
         button.x, button.y, button.bWidth, button.bHeight);
     }
  })
+
     generalButs.forEach(function(button){
         if(button.draw == true){
             Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
             button.x, button.y, button.bWidth, button.bHeight);
         }
-    })
-
-   
-            
+    })            
 },
   mainLoop :function() {
     Menu.clearCanvas();
@@ -147,7 +145,7 @@ var Menu = {
         Menu.canvas.addEventListener('mousedown', function(event) {
             var mousePos = Menu.getMousePos(Menu.canvas, event);
             if(currentState == 'menu'){
-                Menu.checkClickOnCat(mousePos.x,mousePos.y);
+                Menu.checkClickOn(mousePos.x,mousePos.y);
             }
         }, false);
 

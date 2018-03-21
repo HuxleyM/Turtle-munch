@@ -103,4 +103,4 @@ function Character(sourceW, sourceH, sourceX, sourceY, bWidth, bHeight, x, y, cy
     this.move = 0;
  }
 // starting enemies 2 jellfish 4 plastic
-var inPlay = [new JellyFish(), new JellyFish(), new Plastic(), new Plastic(), new Plastic()];
+var inPlay = [new JellyFish(), new JellyFish(), new Plastic(), new Plastic()];
