@@ -1,0 +1,17 @@
+
+
+body{
+    background: #000;
+}
+
+canvas{
+    display: block;
+    margin: 0 auto;
+    width: 80vw;
+    height: 80vh;
+    background:lightblue;
+    border-radius: 5px;
+    border: 2pt solid white;
+}
+
+

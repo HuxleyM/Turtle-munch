@@ -1,25 +1,10 @@
 "use strict";
 
 var Menu = {
-	canvas : undefined,
-    canvasContext : undefined,
 
-
-    //------- pairing to controls 
-    getMousePos : function(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
-        return {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
-        };
-    },
-
-    checkClickOn : function(mouseX, mouseY) {
+    checkClick: function() {
         // if being closed change else to the rest of this
-        if(mouseX < CloseBut.x + CloseBut.bWidth &&
-            mouseX > CloseBut.x &&
-            CloseBut.y < mouseY  &&
-            CloseBut.bHeight + CloseBut.y > mouseY){
+        if(Mouse.checkClickOn(CloseBut)){
                 // change all draw state to false
                 startMenuButs.forEach(function(button){
                     button.draw = true;
@@ -32,27 +17,23 @@ var Menu = {
         }
     else{
             for(var i = 0 ; i < startMenuButs.length; i++){
-                // if any buttons are clicked
-            var button = startMenuButs[i];
+                var button = startMenuButs[i];
 
-            if(mouseX < button.x + button.bWidth &&
-                mouseX > button.x &&
-                button.y < mouseY  &&
-                button.bHeight + button.y > mouseY){
+                if(Mouse.checkClickOn(button)){
                     // change all draw state to false
                     startMenuButs.forEach(function(button){
                         button.draw = false;
                     });
                     // change close button to true
                     CloseBut.draw = true;
-                    // write correct display
+                    // write correct info display
                     if(button == StartBut){
-                        controlState('play')
+                        CloseBut.draw = false;
+                        controlState('game')
                     }
                     else if(button == CreditsBut){
                        
                         CreditsInfo.draw = true;
-                        console.log('assigning');
                     }
                     else{
                         AboutInfo.draw = true;;
@@ -62,105 +43,60 @@ var Menu = {
         }
     },
      
-    
     start : function () 
     {     
-        //-- starting the game again
-        Menu.canvas = document.getElementById('myCanvas');
-        Menu.canvasContext = Menu.canvas.getContext('2d');
-
         //--- background
-        Background.img = new Image();
         Background.img.src = 'backgrounds/background.png';
         
-        //adding start buttons
-        startMenuButs.forEach(function(button){
-            button.img = new Image();
-            button.img.src = 'sprites/buttons.png';
-            button.draw = true;
-        });
-
-        //adding info logs
-        info.forEach(function(button){
-            button.img = new Image();
-            button.img.src = 'sprites/buttons.png';
-            button.draw = false;
-        });
-
-        //adding general buttons (sound and close)
-        generalButs.forEach(function(button){
-            button.img = new Image();
-            button.img.src = 'sprites/buttons.png';
-        });
-    
-        Menu.controls();
+        // initiating start
+        Menu.initiateImages(startMenuButs, 'sprites/buttons.png');
+        Menu.initiateImages(info, 'sprites/buttons.png');
+        Menu.initiateImages(generalButs, 'sprites/buttons.png');
+        Sound.start();
         Menu.mainLoop();
     },
 
+    initiateImages : function(array, src){
+        array.forEach(function(item){
+            item.img = new Image();
+            item.img.src = src;
+        });
+    },
+
     clearCanvas : function () {
-        Menu.canvasContext.clearRect(0, 0, Menu.canvas.width, Menu.canvas.height);
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
     },
 
     update : function () 
-        {   
+        { 
+        if(Mouse.click){
+            Menu.checkClick();
+        }
     },
     draw : function () 
 {   
-    Menu.canvasContext.drawImage(Background.img, 0, 0, Menu.canvas.width, Menu.canvas.height);
-  //void ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-  info.forEach(function(button){
-    if(button.draw == true){
-        Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
-        button.x, button.y, button.bWidth, button.bHeight);
-    }
-})
-
-    startMenuButs.forEach(function(button){
-    if(button.draw == true){
-        Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
-        button.x, button.y, button.bWidth, button.bHeight);
-    }
- })
-
-    generalButs.forEach(function(button){
-        if(button.draw == true){
-            Menu.canvasContext.drawImage(button.img, button.sourceX, button.sourceY, button.sourceW, button.sourceH,
-            button.x, button.y, button.bWidth, button.bHeight);
-        }
-    })            
+    canvasContext.drawImage(Background.img, 0, 0, canvas.width, canvas.height);
+    Menu.drawButton(info);
+    Menu.drawButton(startMenuButs);
+    Menu.drawButton(generalButs);
+       
 },
+  drawButton : function(array){
+    array.forEach(function(item){
+        if(item.draw == true){
+            canvasContext.drawImage(item.img, item.sourceX, item.sourceY, item.sourceW, item.sourceH,
+                item.x, item.y, item.bWidth, item.bHeight);
+        }
+    })     
+  },
   mainLoop :function() {
     Menu.clearCanvas();
     Menu.update();
     Menu.draw();
     // more frames smoother however this depends on the resources of the machine, if unable it will be laggy
     // maths 
-        if(currentState == 'menu'){
+        if(currentState == 'start'){
             window.setTimeout(Menu.mainLoop, 1000 / 10);
         }
     },
-
-    controls : function(){
-        //--- adding the mouse position features
-        Menu.canvas.addEventListener('mousedown', function(event) {
-            var mousePos = Menu.getMousePos(Menu.canvas, event);
-            if(currentState == 'menu'){
-                Menu.checkClickOn(mousePos.x,mousePos.y);
-            }
-        }, false);
-
-        // Checking collision between start button and mouse click
-        Menu.canvas.addEventListener('click', function(event) {
-        var mousePos = Menu.getMousePos(Menu.canvas, event);
-
-        }, false);
-    }
 }
-
-
-
-
-
-
-
-
