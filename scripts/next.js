@@ -8,11 +8,11 @@ var Next ={
         // if being closed change else to the rest of this
         if(Mouse.checkClickOn(NextBut)){
                 // if clicked start playing again.
+                    Difficulty.update();
                     controlState('game');
-            }
-        },
-    start : function () 
-    {    
+        }
+    },
+    start : function (){    
         // adding next button
          nextMenuButs.forEach(function(button){
             button.img = new Image();
@@ -28,12 +28,11 @@ var Next ={
         canvasContext.clearRect(0, 0, canvas.width, canvas.height);
     },
 
-    update : function () 
-    {   
+    update : function (){   
         // updating timer, automatically shift to new state after allotted frames
         Next.timer ++;
         if(Next.timer > 100){
-            difficulty.update();
+            Difficulty.update();
             controlState('game');
         }
 
@@ -41,8 +40,7 @@ var Next ={
             Menu.checkClick();
         }
     },
-    draw : function () 
-    {       
+    draw : function (){       
         canvasContext.drawImage(Background.img, 0, 0, canvas.width, canvas.height);
         nextMenuButs.forEach(function(button){
             if(button.draw == true){

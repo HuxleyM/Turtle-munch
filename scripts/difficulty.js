@@ -3,6 +3,7 @@
 var Difficulty = {
     arrayMax : false,
     level : 1,
+    shark: false,
 
     update: function(){
         this.level++;
@@ -13,11 +14,11 @@ var Difficulty = {
 
     gameArray : function(){
         //-- adding to array for next level
-        if(inPlay.length < 10){
-            inPlay.push(new Plastic, new JellyFish);
+        if(inPlay.length < 12){
+            inPlay.push(new Plastic(), new JellyFish());
         }
         else{
-            arrayMax = true;
+            this.arrayMax = true;
         }
     },
 
@@ -33,12 +34,16 @@ var Difficulty = {
     }, 
 
     rainbowFishlives : function(){
-        if(Game.score > (this.level * 400) && Game.lives < 2){
-            inPlay.push(new RainbowFish());
+        if(Game.lives < 3 && Game.score > (Difficulty.level * 400)){
+            Game.inPlay.push(new RainbowFish());
         }
     },
 
     addShark : function(){
+        if(this.arrayMax){
+            this.shark == true;
+            Game.inPlay.push(new Shark());
+        }
         // logic to add shark
     }
 }

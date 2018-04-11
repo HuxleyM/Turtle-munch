@@ -10,13 +10,16 @@
 	<!-- setting the view port width-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- style sheets -->
-	<!--<link rel='stylesheet' href='style/main.css'>-->
+	<link rel='stylesheet' href='style/main.css'>
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 	<!-- script tags -->
 	<script src="scripts/listObjects.js"></script>
 	<script src="scripts/keys.js"></script>
 	<script src="scripts/mouse.js"></script>
 	<script src="scripts/sounds.js"></script>
 	<script src="scripts/difficulty.js"></script>
+	<script src="scripts/highscore.js"></script>
 	<script src="scripts/game.js"></script>
 	<script src="scripts/menu.js"></script>
 	<script src="scripts/next.js"></script>
@@ -27,15 +30,14 @@
 <audio id='gameOverMusic' src="gameSounds/FGB.mp3"></audio>
 
 <body>
-	<canvas id="myCanvas" height='500' width='600'>
+	<div id='wrapper'>
+		<h1> Turtle Munch! </h1>
+		<canvas id="myCanvas" height='500' width='700'>
 		<!-- adding fall back code to indicate wether the browser supports canvas-->
 		Your browser does not support HTML5 Canvas :(.
+	</div>
 </body>
 <script>
-
-	/*setting cookies
-	document.cookie = "name = G; score = 800";
-	var highscore = Over.getCookie('score');*/
 
    var 
    /* audio variables*/
@@ -48,7 +50,7 @@
    canvasContext = canvas.getContext('2d');
 
    document.addEventListener( 'DOMContentLoaded', controlState('start'));
-
+	Highscore.current();
 	// switch statement to control the state of the application */
 	function controlState(gameState){
 		// startinng the keys object

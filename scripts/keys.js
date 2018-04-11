@@ -10,7 +10,7 @@ var Keys = {
         var self = this;
         window.addEventListener('keydown', function(event){
             self.key = event.keyCode;
-            console.log(self.key);
+            //console.log(self.key);
             self.press = true;
             self.handleDownKey();
         }, true);
@@ -47,7 +47,7 @@ var Keys = {
             default: 
                 break;
         } 
-        console.log(currentState + Keys.key);
+        //console.log(currentState + Keys.key);
     },
     
     handleUpKey: function(){

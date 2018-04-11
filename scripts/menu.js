@@ -79,6 +79,13 @@ var Menu = {
     Menu.drawButton(info);
     Menu.drawButton(startMenuButs);
     Menu.drawButton(generalButs);
+
+    //-- high score is a write over 
+    canvasContext.fillStyle = '#fff';
+    canvasContext.font = '20px sans-serif';
+    canvasContext.textBaseline = 'top'; 
+    canvasContext.fillText("highscore: "+Highscore.name +' '+ Highscore.highscore  , 200, 0);
+         
        
 },
   drawButton : function(array){

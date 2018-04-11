@@ -5,6 +5,8 @@ var Over = {
     checkClick : function() {
         if(Mouse.checkClickOn(PlayAgainBut)){
             // this restarts the game, automatically pointing to menu start
+                   // cookie trying 
+            Highscore.check(Game.score);
             location.reload(true);  
         }
     },

@@ -16,6 +16,15 @@ var Sound = {
         }
     },
 
+    checkMuted: function(){
+        if(this.mute){
+            Sound.audio.volume = 0;
+        }
+        else{
+            Sound.audio.volume = 0.8;
+        }
+    },
+
     background: function(){
         this.playing = true;
 
@@ -32,16 +41,12 @@ var Sound = {
             var audio = this.audio;
             // ok so this is gonna just keep looping until the end.
             audio.addEventListener('ended', function() {
+
+
                 this.currentTime = 0;
                 audio.play();
                 this.playing = true;
             }, false);
             audio.play();
     },
-
-    // not working with Tribe called Quest  :(
-    volumeMute : function(x){
-        console.log('i tried!' + this.audio)
-        Sound.audio.volume = x;
-    }
 }

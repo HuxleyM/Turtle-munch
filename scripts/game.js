@@ -3,10 +3,6 @@
 var Game = {
     x: 0,
     y: 0,
-    maximumHeight: undefined,
-    maximumWidth: undefined,
-    delta_y: undefined,
-    delta_x: undefined,
     gravity : 2,
     inPlay : [],
     // building in game notifications
@@ -18,15 +14,12 @@ var Game = {
     score: 0,
     frames : 0,
     
-    start : function () 
-    {     
+    start : function ()  {     
         // controlling the switch statement.
         currentState = 'game';
         Background.img.src='backgrounds/play.png';
-            // we need to make x and y varibales for b and g or else everything is pushe dof
         Background.x = Game.x;
         Background.y = Game.y;
-        //the global varibales will automatically append as they are not in any object.
         Background.maximumWidth = canvas.width;
         Background.maximumHeight = canvas.height;
         Background.delta_x= - 5; ///--------------------------- changed Game for object
@@ -61,7 +54,7 @@ var Game = {
         canvasContext.fillText("score " +Game.score, 200, 0);
         canvasContext.fillText("level " + Difficulty.level, 50, 0);
         canvasContext.fillText("lives " +Game.lives , 350, 0);
-        //Game.canvasContext.fillText("Highscore " + highscore, 350, 100);
+        canvasContext.fillText("highscore " + Highscore.highscore , 50, 50);
         // any notification i.e. lost life or plus 50 go here
         canvasContext.font = '40px sans-serif';
         if(Game.notificationPost){
@@ -89,9 +82,8 @@ var Game = {
         // gravity acting on turtle
         Player.y += Game.gravity;
         // frame count will instigate wehn to take to next screen
-        Game.frames++
+        Game.frames++;
         Game.score++;
-
         // as levels progress, the next menu will give enemies additional up and down movement values.
         // Game loop will run and move the characters the movement value assigned
         Game.inPlay.forEach(function(enemy){
@@ -116,16 +108,9 @@ var Game = {
             Game.notificationTimer = 0;
             Game.notificationPost = false;
         }
-       
-        // every 500 frames new level
-        if(Game.frames > (500)){
-            difficulty.update();
-            controlState('next');
-        }
 
         // -- checkinkg charcters havent collided
         Game.checkCollision();
-        
         //-- updating the moving background
         Background.x += Background.delta_x;
         if(Background.x <= - Background.maximumWidth){
@@ -152,6 +137,7 @@ var Game = {
         // checking no charcters collide with player
         for(var i = 0 ; i < Game.inPlay.length; i++){
             var enemy = Game.inPlay[i];
+
             if(Player.x < enemy.x + enemy.bWidth &&
                 Player.x + Player.bWidth > enemy.x &&
                 Player.y < enemy.y + enemy.bHeight &&
@@ -160,11 +146,7 @@ var Game = {
                     if(enemy.name == 'plastic'){
                         // setting notifications
                         Game.notification = 'lost a life!';
-                        Game.notificationPost = true;
-
                         Game.lives--;
-                        enemy.x = Math.floor((Math.random()* canvas.width)+ (canvas.width/2));
-                        enemy. y = Math.floor((Math.random()* canvas.height) - enemy.bHeight );
                         if(Game.lives == 0){
                             controlState('over');
                         }
@@ -172,29 +154,22 @@ var Game = {
                     else if(enemy.name == 'jellyfish'){
                         // setting notifications
                         Game.notification = ' yummy! + 50';
-                        Game.notificationPost = true;
-
                         Game.score += 50;
-                        // spawn elsewhere
-                        enemy.x = Math.floor((Math.random()* canvas.width)+ (canvas.width/2));
-                        enemy. y = Math.floor((Math.random()* canvas.height) - enemy.bHeight );
-
                     }
                     else if(enemy.name == 'fish'){
                         // setting notifications
                         Game.notification = ' another Life!';
-                        Game.notificationPost = true;
-                        
-                        Game.inPlay.splice(i,1);
-                        
+                        Game.inPlay.splice(i,1);           
                         Game.lives += 1;
-                        // spawn elsewhere
-                        enemy.x = Math.floor((Math.random()* canvas.width)+ (canvas.width/2));
-                        enemy. y = Math.floor((Math.random()* canvas.height) - enemy.bHeight );
                     }
                     else{
                         // do something
                     };  
+                    // do regardless
+                    // spawn elsewhere
+                    Game.notificationPost = true;
+                    enemy.x = Math.floor((Math.random()* canvas.width)+ (canvas.width/2));
+                    enemy. y = Math.floor((Math.random()* canvas.height) - enemy.bHeight );
                 }
         }
     },
@@ -210,12 +185,19 @@ var Game = {
             enemy.x, enemy.y, enemy.bWidth, enemy.bHeight);
         })
     },
+    
     mainLoop :  function() {
         Game.clearCanvas();
         Game.update();
         Game.draw();
         // more frames smoother however Game depends on the resources of the machine, if unable it will be laggy
         // maths 
+        // every 500 frames new level
+         if(Game.frames > (500 * Difficulty.level)){
+            Difficulty.update();
+            controlState('next');
+        }
+
         if(currentState == 'game'){
             window.setTimeout(Game.mainLoop, 1000 / 20);
         }

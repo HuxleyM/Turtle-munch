@@ -60,9 +60,9 @@ function Character() {
     this.sourceH = 146;
 	this.sourceX = 0;
     this.sourceY = 75;
-    this.bWidth = 100;
-    this.bHeight = 75;
-    this.x = 100;
+    this.bWidth = 90;
+    this.bHeight = 65;
+    this.x = 50;
     this.y = 100;
     // sprites
     this.cycle = 0;
@@ -123,4 +123,34 @@ function Character() {
     this.move = 0;
  }
 // starting enemies 2 jellfish 4 plastic
-var inPlay = [new JellyFish(), new Plastic(), new Plastic(), new Plastic()];
+
+function Shark(){
+    this.name = 'shark';
+    this.sourceW = 74;
+    this.sourceH = 74;
+	this.sourceX = 70;
+    this.sourceY = 0;
+    this.bWidth = 60;
+    this.bHeight = 60;
+    this.x = Math.floor((Math.random()*600) + (300));
+    this.y = Math.floor((Math.random()*500)+1);
+    // sprites
+    this.cycle = 0;
+    this.frames = 1;
+    //movemnet
+    this.move = 0;
+ }
+var inPlay = [new JellyFish(), new Plastic(), new Plastic(), new Plastic(), new Plastic()];
+
+//----------------------------------------- sound Resources
+// put your sound buttons in an array whih toggle between displays accroding to sound
+
+var SoundOn = {
+}
+SoundOn.img = new Image();
+SoundOn.img.src = '../icons/soundOn.png';
+SoundOn.bWidth = 50;
+SoundOn.bHeight = 50;
+SoundOn.draw = true;
+
+
