@@ -37,8 +37,8 @@ var Menu = {
                     }
                     else{
                         AboutInfo.draw = true;;
+                    }
                 }
-            }
             }
         }
     },
@@ -52,7 +52,7 @@ var Menu = {
         Menu.initiateImages(startMenuButs, 'sprites/buttons.png');
         Menu.initiateImages(info, 'sprites/buttons.png');
         Menu.initiateImages(generalButs, 'sprites/buttons.png');
-        Sound.start();
+
         Menu.mainLoop();
     },
 

@@ -25,7 +25,7 @@ var Game = {
         Background.delta_x= - 5; ///--------------------------- changed Game for object
         Background.delta_y= - 0.5;
         //adding general buttons (sound and close)
-         generalButs.forEach(function(button){
+            generalButs.forEach(function(button){
             button.img = new Image();
             button.img.src = 'sprites/buttons.png';
         });
@@ -40,7 +40,6 @@ var Game = {
             Char.img = new Image();
             Char.img.src = 'sprites/gameChars.png';
         });
-        Sound.start();
         Game.mainLoop();
     },
     drawBackground : function(){
@@ -51,9 +50,9 @@ var Game = {
         canvasContext.fillStyle = '#fff';
         canvasContext.font = '20px sans-serif';
         canvasContext.textBaseline = 'top'; 
-        canvasContext.fillText("score " +Game.score, 200, 0);
+        canvasContext.fillText("score " + Game.score, 200, 0);
         canvasContext.fillText("level " + Difficulty.level, 50, 0);
-        canvasContext.fillText("lives " +Game.lives , 350, 0);
+        canvasContext.fillText("lives " + Game.lives , 350, 0);
         canvasContext.fillText("highscore " + Highscore.highscore , 50, 50);
         // any notification i.e. lost life or plus 50 go here
         canvasContext.font = '40px sans-serif';
@@ -84,17 +83,25 @@ var Game = {
         // frame count will instigate wehn to take to next screen
         Game.frames++;
         Game.score++;
-        // as levels progress, the next menu will give enemies additional up and down movement values.
+        // as levels progress, the next menu will work with the difficulty object give enemies additional up and down movement values.
         // Game loop will run and move the characters the movement value assigned
         Game.inPlay.forEach(function(enemy){
             // move charcter down
-            enemy.y += enemy.move;
+            if(enemy.name == 'shark'){
+                enemy.x -= enemy.move;
+            }
+            else{
+                enemy.y += enemy.move;
+            }
             // if charcter off screen move upwards
-            if(enemy.y+ enemy.bHeight > canvas.height){
+            if(enemy.y + enemy.bHeight > canvas.height){
                 enemy.move = - enemy.move;
             }
-            if(enemy.y - enemy.bHeight <  0 ){
+            else if(enemy.y + enemy.bHeight <  0 ){
                 enemy.move = + enemy.move;
+            }
+            else{
+                console.log('unexpected movement');
             }
         });
 
@@ -121,7 +128,7 @@ var Game = {
         for(var i = 0; i < Game.inPlay.length; i++){
             var char = Game.inPlay[i];
             char.x -= 5;
-            if(char.x < 0){
+            if(char.x + char.bWidth < 0){
                 char.x = Math.floor((Math.random()* canvas.width)+ canvas.width);
                 char. y = Math.floor((Math.random()* canvas.height) - char.bHeight );
             }
@@ -147,15 +154,19 @@ var Game = {
                         // setting notifications
                         Game.notification = 'lost a life!';
                         Game.lives--;
-                        if(Game.lives == 0){
-                            controlState('over');
-                        }
+                    }
+                    else if(enemy.name == 'shark'){
+                        // setting notifications
+                        Game.notification = 'lost a life!';
+                        Game.lives--;
+                      
                     }
                     else if(enemy.name == 'jellyfish'){
                         // setting notifications
                         Game.notification = ' yummy! + 50';
                         Game.score += 50;
                     }
+                    
                     else if(enemy.name == 'fish'){
                         // setting notifications
                         Game.notification = ' another Life!';
@@ -163,14 +174,17 @@ var Game = {
                         Game.lives += 1;
                     }
                     else{
-                        // do something
+                        /* do something*/
                     };  
                     // do regardless
                     // spawn elsewhere
+                    if(Game.lives == 0){
+                        controlState('over');
+                    }
                     Game.notificationPost = true;
                     enemy.x = Math.floor((Math.random()* canvas.width)+ (canvas.width/2));
-                    enemy. y = Math.floor((Math.random()* canvas.height) - enemy.bHeight );
-                }
+                    enemy. y = Math.floor((Math.random()* canvas.height) + enemy.bHeight );
+            }
         }
     },
     draw : function (){ 
@@ -183,7 +197,7 @@ var Game = {
         Game.inPlay.forEach(function(enemy){
             canvasContext.drawImage(enemy.img, enemy.sourceX + (enemy.sourceW * enemy.cycle), enemy.sourceY, enemy.sourceW, enemy.sourceH,
             enemy.x, enemy.y, enemy.bWidth, enemy.bHeight);
-        })
+        }) 
     },
     
     mainLoop :  function() {

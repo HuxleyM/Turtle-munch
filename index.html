@@ -32,7 +32,7 @@
 <body>
 	<div id='wrapper'>
 		<h1> Turtle Munch! </h1>
-		<canvas id="myCanvas" height='500' width='700'>
+		<canvas id="myCanvas" height='500' width='600'>
 		<!-- adding fall back code to indicate wether the browser supports canvas-->
 		Your browser does not support HTML5 Canvas :(.
 	</div>
@@ -49,20 +49,23 @@
    canvas = document.getElementById('myCanvas'),
    canvasContext = canvas.getContext('2d');
 
+   	Highscore.current();
+
    document.addEventListener( 'DOMContentLoaded', controlState('start'));
-	Highscore.current();
+
 	// switch statement to control the state of the application */
 	function controlState(gameState){
 		// startinng the keys object
+	
 		Keys.start();
 		Mouse.start();
 		switch (gameState){
 			case 'start':
-				currentState = 'start';
+				currentState = 'start';	
 				Menu.start();
 				break;
 			case 'game':
-				currentState ='game';
+				currentState = 'game';
 				Game.start();
 				break;
 			case 'next':
@@ -77,6 +80,7 @@
 			default:
 				console.log('state not recognised');
 		}
+		Sound.start();
 	}
 </script>
 </html>

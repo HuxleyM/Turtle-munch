@@ -18,8 +18,8 @@ CreditsBut =    new Button(200, 50, 0, 130, 200, 50, 200, 156),
 AboutBut =      new Button(200, 50, 0, 184, 200, 50, 200, 210),
 NextBut =       new Button(200, 50, 0, 240, 200, 50, 200, 100),
 PlayAgainBut =  new Button(200, 50, 0, 298, 200, 50, 200, 300),
-CloseBut =      new Button(54,  54, 76, 2, 50, 50, 300, 300),
-SoundBut =      new Button(60, 60, 0, 0, 30, 30, 550, 20);
+CloseBut =      new Button(50,  50, 150, 6, 50, 50, 300, 300),
+SoundBut =      new Button(80, 67, 0, 0, 30, 30, 550, 20); // default on sprite position
 
 //------------------------------------- making about boxes with the same constructor as buttons
 
@@ -60,8 +60,8 @@ function Character() {
     this.sourceH = 146;
 	this.sourceX = 0;
     this.sourceY = 75;
-    this.bWidth = 90;
-    this.bHeight = 65;
+    this.bWidth = 80;
+    this.bHeight = 55;
     this.x = 50;
     this.y = 100;
     // sprites
@@ -114,7 +114,7 @@ function Character() {
     this.sourceY = 0;
     this.bWidth = 60;
     this.bHeight = 60;
-    this.x = Math.floor((Math.random()*600) + (300));
+    this.x = Math.floor((Math.random()*600) + (600));
     this.y = Math.floor((Math.random()*500)+1);
     // sprites
     this.cycle = 0;
@@ -126,13 +126,13 @@ function Character() {
 
 function Shark(){
     this.name = 'shark';
-    this.sourceW = 74;
-    this.sourceH = 74;
-	this.sourceX = 70;
+    this.sourceW = 118;
+    this.sourceH = 65;
+	this.sourceX = 169;
     this.sourceY = 0;
-    this.bWidth = 60;
-    this.bHeight = 60;
-    this.x = Math.floor((Math.random()*600) + (300));
+    this.bWidth = 140;
+    this.bHeight = 70;
+    this.x = Math.floor((Math.random()*300) + (600));
     this.y = Math.floor((Math.random()*500)+1);
     // sprites
     this.cycle = 0;
@@ -140,17 +140,4 @@ function Shark(){
     //movemnet
     this.move = 0;
  }
-var inPlay = [new JellyFish(), new Plastic(), new Plastic(), new Plastic(), new Plastic()];
-
-//----------------------------------------- sound Resources
-// put your sound buttons in an array whih toggle between displays accroding to sound
-
-var SoundOn = {
-}
-SoundOn.img = new Image();
-SoundOn.img.src = '../icons/soundOn.png';
-SoundOn.bWidth = 50;
-SoundOn.bHeight = 50;
-SoundOn.draw = true;
-
-
+var inPlay = [new JellyFish(), new Shark(), new Plastic(), new Plastic(), new Plastic(), new Plastic()];

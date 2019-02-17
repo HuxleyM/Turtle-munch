@@ -28,7 +28,7 @@ var Over = {
     
         //--- background
         Background.img.src = 'backgrounds/dead.jpg';
-        Sound.start();
+
         Over.mainLoop();
     },
     clearCanvas : function () {

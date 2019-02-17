@@ -1,9 +1,8 @@
 "use strict";
 
 var Difficulty = {
-    arrayMax : false,
     level : 1,
-    shark: false,
+    superShark: false,
 
     update: function(){
         this.level++;
@@ -15,10 +14,12 @@ var Difficulty = {
     gameArray : function(){
         //-- adding to array for next level
         if(inPlay.length < 12){
-            inPlay.push(new Plastic(), new JellyFish());
+            inPlay.push(new JellyFish(), new JellyFish(), new Plastic());
         }
         else{
-            this.arrayMax = true;
+            if(!this.superShark){
+                this.addShark();
+            }
         }
     },
 
@@ -28,8 +29,17 @@ var Difficulty = {
                 enemy.move += 1.5;
             })
         }
+        else if(this.level > 4  && this.level % 3 == 0){
+            Game.inPlay.forEach(function(enemy){
+                enemy.move += 2;
+            })
+        }
         else{Game.inPlay.forEach(function(enemy){
             enemy.move = 0;
+            // exception for sharks
+            if(enemy.name == 'shark'){
+                enemy.move = 3;
+            }
         })}
     }, 
 
@@ -40,10 +50,12 @@ var Difficulty = {
     },
 
     addShark : function(){
-        if(this.arrayMax){
-            this.shark == true;
-            Game.inPlay.push(new Shark());
-        }
+        this.superShark == true;
+        var superShark = new Shark();
+        superShark.bWidth = 300;
+        superShark.bHeight = 150;
+        superShark.move = 0.5;
+        Game.inPlay.push(superShark);
         // logic to add shark
     }
 }

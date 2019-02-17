@@ -5,48 +5,66 @@ var Sound = {
     audio : undefined,
     playing: false,
 
+    
+    // starts the audio function
     start: function(){
         if(this.playing){
             this.audio.pause();
             this.playing = false;
+            console.log(Sound);
+            this.background();
+        }
+        else if (!this.playing){
             this.background();
         }
         else{
-            this.background();
+            console.log('sound error');
         }
     },
 
-    checkMuted: function(){
+    //checks wether muted or not
+    checkMuted: function(x){
+            Sound.audio.volume = x;
+            this.changeSymbol();
+    },
+
+    changeSymbol: function(){
         if(this.mute){
-            Sound.audio.volume = 0;
+            SoundBut.sourceW = 80;
+            SoundBut.sourceH = 67;
+            SoundBut.sourceX = 0;
+            SoundBut.sourceY = 0;
+          
         }
         else{
-            Sound.audio.volume = 0.8;
+            SoundBut.sourceW = 60;
+            SoundBut.sourceH = 63;
+            SoundBut.sourceX = 82;
+            SoundBut.sourceY = 3;
         }
     },
-
+    // decides which background music to choose
     background: function(){
-        this.playing = true;
-
         if(currentState == 'game'){
            this.audio = startAudio;
         }
-        else{
+        else {
             this.audio = overAudio;
         }
         Sound.play();
     },
 
+    // this loops the sound sprites
     play : function(){
+
             var audio = this.audio;
             // ok so this is gonna just keep looping until the end.
             audio.addEventListener('ended', function() {
-
-
                 this.currentTime = 0;
                 audio.play();
-                this.playing = true;
             }, false);
+
             audio.play();
+            this.playing = true;
     },
 }

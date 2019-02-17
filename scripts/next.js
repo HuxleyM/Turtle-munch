@@ -21,7 +21,7 @@ var Next ={
 
         //--- adding background
         Background.img.src = 'backgrounds/next.jpg';
-        Sound.start();
+
         Next.mainLoop();
     },
     clearCanvas : function () {

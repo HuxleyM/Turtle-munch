@@ -1,7 +1,6 @@
 "use strict"
 
-var Highscore = { 
-    alreadySet: false,  
+var Highscore = {  
     name: undefined,
     highscore: 0,
 
@@ -13,18 +12,13 @@ var Highscore = {
         }
         else{
             console.log("no cookies set");
-            document.cookie = 'name = undefined ;';
+            document.cookie = 'name = masterTurtle ;';
             document.cookie = 'score = 300;';
         }
     },
 
     check : function(score){
 
-        // checking if ones alreay set
-        if(!this.alreadySet){
-            this.highscore = this.fetchCookie(score);
-            this.alreadySet == true;
-        }
        
         if(score > this.highscore){
             this.highscore = score;

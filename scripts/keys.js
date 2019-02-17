@@ -14,7 +14,23 @@ var Keys = {
             self.press = true;
             self.handleDownKey();
         }, true);
-        window.addEventListener('keyUp', Keys.handleUpKey(currentState), true);
+
+        window.addEventListener('keyup', function(event){
+            //console.log('pressed');
+            if(event.keyCode == 80){
+                if(Sound.mute === true){
+                    //turn on
+                    console.log('on' + Sound.mute);
+                    Sound.checkMuted(1);
+                    Sound.mute = false;
+                }
+                else {
+                console.log('off'+ Sound.mute)
+                  Sound.checkMuted(0);
+                  Sound.mute = true;
+                }
+            }
+        }, true);
     },
     handleDownKey : function(){
         var key = Keys.key;
@@ -34,17 +50,15 @@ var Keys = {
                     }
                 }
                 break;
-            case 80:
-                if(Sound.mute){
-                    Sound.volumeMute(0.8);
-                    Sound.mute = false;
-                }
-                else{
-                  Sound.volumeMute(0);
-                  Sound.mute = true;
+            case 40: 
+                if(currentState == 'game'){
+                    if(Player.y > 0){
+                        Player.y +=5;
+                    }
                 }
                 break;
             default: 
+                //console.log(key);
                 break;
         } 
         //console.log(currentState + Keys.key);
