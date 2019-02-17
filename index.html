@@ -2,44 +2,70 @@
 <!doctype html>
 <html>
 <head>
-
-<title>Garp garp</title>
-<script src="listObjects.js"></script>
-<script src="garpgarp.js"></script>
-<script src="menu.js"></script>
-<script src="next.js"></script>
-<script src="over.js"></script>
-<style>
-canvas{
-	display: block;
-	margin: 10px auto;
-	background: lightblue;
-}
-
-</style>
+	<meta charset ='UTF-8'>
+	<title>Turtl Munch | Turtle Flappy Bird </title>
+	<!-- SEO Features -->
+	<meta name="turtle munch" content="A flappy bird mechanic game. Help your turtle eat jellyfish and avoid plastic bags">
+	<meta name="subject" content="A turtle game">
+	<!-- setting the view port width-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- style sheets -->
+	<link rel='stylesheet' href='style/main.css'>
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+	<!-- script tags -->
+	<script src="scripts/listObjects.js"></script>
+	<script src="scripts/keys.js"></script>
+	<script src="scripts/mouse.js"></script>
+	<script src="scripts/sounds.js"></script>
+	<script src="scripts/difficulty.js"></script>
+	<script src="scripts/highscore.js"></script>
+	<script src="scripts/game.js"></script>
+	<script src="scripts/menu.js"></script>
+	<script src="scripts/next.js"></script>
+	<script src="scripts/over.js"></script>
 </head>
+<!-- adding in game audio files --> 
+<audio id="playMusic" src="gameSounds/TCQ.mp3"></audio>
+<audio id='gameOverMusic' src="gameSounds/FGB.mp3"></audio>
+
 <body>
-<!--onload ="recursive(1)"-->
-
-	<canvas id="myCanvas" width="600" height="600">
-
+	<div id='wrapper'>
+		<h1> Turtle Munch! </h1>
+		<canvas id="myCanvas" height='500' width='600'>
+		<!-- adding fall back code to indicate wether the browser supports canvas-->
+		Your browser does not support HTML5 Canvas :(.
+	</div>
 </body>
 <script>
-   var currentState = undefined;
+
+   var 
+   /* audio variables*/
+   startAudio = document.getElementById('playMusic'),
+   overAudio = document.getElementById('gameOverMusic'),
+   /* game play*/
+   currentState = undefined,
+   /* canvas */
+   canvas = document.getElementById('myCanvas'),
+   canvasContext = canvas.getContext('2d');
+
+   	Highscore.current();
+
    document.addEventListener( 'DOMContentLoaded', controlState('start'));
-	// adding level to control
-   var level = 1;
 
-    //------------------------------------------------------------------------------------------------sorting out global key presses why do i even do this?
-
+	// switch statement to control the state of the application */
 	function controlState(gameState){
+		// startinng the keys object
+	
+		Keys.start();
+		Mouse.start();
 		switch (gameState){
 			case 'start':
-				currentState = 'menu';
+				currentState = 'start';	
 				Menu.start();
 				break;
-			case 'play':
-				currentState ='game';
+			case 'game':
+				currentState = 'game';
 				Game.start();
 				break;
 			case 'next':
@@ -54,12 +80,7 @@ canvas{
 			default:
 				console.log('state not recognised');
 		}
-
+		Sound.start();
 	}
-
-
-   
-
-	// swithc statement to control the state of the application */
 </script>
 </html>

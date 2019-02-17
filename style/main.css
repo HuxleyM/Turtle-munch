@@ -1,0 +1,26 @@
+
+
+body{
+    background: #000;
+}
+
+#wrapper{
+    padding: 3em;
+}
+
+#wrapper h1{
+    font-size: 3em;
+    color: white;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+canvas{
+    display: block;
+    margin: 0 auto;
+    background:lightblue;
+    border-radius: 5px;
+    border: 2pt solid white;
+}
+
+
